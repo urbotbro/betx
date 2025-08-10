@@ -23,6 +23,8 @@ type Tipster = {
   recent: { match: string; result: 'W' | 'L' }[];
 };
 
+type SortKey = 'roi' | 'winrate' | 'tips';
+
 const TIPSTERS: Tipster[] = [
   {
     id: 's1',
@@ -75,7 +77,7 @@ const TIPSTERS: Tipster[] = [
 
 export default function TipsterPage() {
   const [query, setQuery] = useState('');
-  const [sort, setSort] = useState<'roi' | 'winrate' | 'tips'>('roi');
+  const [sort, setSort] = useState<SortKey>('roi');
   const [connected, setConnected] = useState(false);
 
   const list = useMemo(() => {
@@ -150,7 +152,7 @@ export default function TipsterPage() {
               <select
                 className="bg-transparent py-2 text-sm outline-none text-slate-100"
                 value={sort}
-                onChange={(e) => setSort(e.target.value as any)}
+                onChange={(e) => setSort(e.target.value as SortKey)}
               >
                 <option className="bg-slate-800 text-slate-100" value="roi">Highest ROI</option>
                 <option className="bg-slate-800 text-slate-100" value="winrate">Best win rate</option>
@@ -167,14 +169,15 @@ export default function TipsterPage() {
             return (
               <Card key={t.id} className="bg-slate-900/60 border-slate-800 overflow-hidden">
                 <CardHeader>
-                  <CardTitle className="text-base text-slate-200 flex items-center justify-between">
+                  <CardTitle className="text-base text-slate-100 flex items-center justify-between">
                     <span className="flex items-center gap-2">
                       <span className="h-8 w-8 rounded-full bg-slate-800 grid place-items-center text-xs text-slate-300">
                         {t.name.slice(0,2).toUpperCase()}
                       </span>
-                      <span className="text-slate-200">{t.name}</span>
+                      <span className="text-slate-100">{t.name}</span>
                     </span>
-                    <Badge variant="secondary" className="text-slate-900">{streakLabel}</Badge>
+                    {/* ডার্ক থিমে ব্যাজ টেক্সট ভিজিবল */}
+                    <Badge className="bg-slate-800 text-slate-100 border border-slate-700">{streakLabel}</Badge>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3 text-sm text-slate-300">
@@ -226,7 +229,7 @@ export default function TipsterPage() {
                       <a href="/tips">View tips</a>
                     </Button>
                     <Button asChild variant="secondary" className="w-1/2 rounded-xl">
-                      <a href={`/tipster/apply`}>Apply as tipster</a>
+                      <a href="/tipster/apply">Apply as tipster</a>
                     </Button>
                   </div>
 

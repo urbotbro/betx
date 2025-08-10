@@ -24,6 +24,8 @@ type Tip = {
   pickReveal: string;
 };
 
+type SortKey = 'soon' | 'winrate' | 'price';
+
 // Demo tips
 const TIPS: Tip[] = [
   {
@@ -64,7 +66,7 @@ const TIPS: Tip[] = [
 export default function TipsPage() {
   const [items, setItems] = useState<Tip[]>(TIPS);
   const [query, setQuery] = useState('');
-  const [sort, setSort] = useState<'soon'|'winrate'|'price'>('soon');
+  const [sort, setSort] = useState<SortKey>('soon');
   const [connected, setConnected] = useState(false);
 
   const filtered = useMemo(() => {
@@ -153,7 +155,7 @@ export default function TipsPage() {
               <select
                 className="bg-transparent py-2 text-sm outline-none text-slate-100"
                 value={sort}
-                onChange={e=>setSort(e.target.value as any)}
+                onChange={e=>setSort(e.target.value as SortKey)}
               >
                 <option className="bg-slate-800 text-slate-100" value="soon">Soonest</option>
                 <option className="bg-slate-800 text-slate-100" value="winrate">Best win rate</option>
@@ -170,9 +172,10 @@ export default function TipsPage() {
             return (
               <Card key={tip.id} className="bg-slate-900/60 border-slate-800 overflow-hidden">
                 <CardHeader>
-                  <CardTitle className="text-base text-slate-200 flex items-center justify-between">
-                    <span className="text-slate-200">{tip.league}</span>
-                    <Badge variant="secondary" className="text-slate-900">{timeLeftMin}m</Badge>
+                  <CardTitle className="text-base text-slate-100 flex items-center justify-between">
+                    <span>{tip.league}</span>
+                    {/* ডার্ক ব্যাজ টেক্সট ভিজিবল */}
+                    <Badge className="bg-slate-800 text-slate-100 border border-slate-700">{timeLeftMin}m</Badge>
                   </CardTitle>
                 </CardHeader>
 

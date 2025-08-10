@@ -52,9 +52,9 @@ export default function LandingPage() {
             <a href="#features" className="hover:text-white/90 text-slate-200">Features</a>
             <a href="#roadmap" className="hover:text-white/90 text-slate-200">Roadmap</a>
             <a href="#sale" className="hover:text-white/90 text-slate-200">Sale</a>
-            <a href="/tips" className="hover:text-white/90 text-slate-200">Tips</a>
-            <a href="/tipster" className="hover:text-white/90 text-slate-200">Tipster</a>
-            <a href="/bet" className="hover:text-white/90 text-slate-200">Bet</a>
+            <Link href="/tips" className="hover:text-white/90 text-slate-200">Tips</Link>
+            <Link href="/tipster" className="hover:text-white/90 text-slate-200">Tipster</Link>
+            <Link href="/bet" className="hover:text-white/90 text-slate-200">Bet</Link>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -70,7 +70,7 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        {/* ক্লিক ব্লক ঠেকাতে -z-10 + pointer-events-none */}
+        {/* pointer blocking fix */}
         <div className="absolute inset-0 -z-10 pointer-events-none opacity-30 bg-[radial-gradient(45rem_35rem_at_50%_0%,#2563eb_10%,transparent_60%)]" />
         <div className="max-w-6xl mx-auto px-4 pt-20 pb-24 text-center">
           <Badge variant="outline" className="mb-4 border-emerald-400/40 text-emerald-300">
@@ -89,7 +89,7 @@ export default function LandingPage() {
               <a href="#sale"><Rocket className="mr-2 h-5 w-5" />Get in on the Sale</a>
             </Button>
 
-            {/* Read works via Next.js route */}
+            {/* Read via Next.js route */}
             <Button size="lg" variant="secondary" className="rounded-2xl px-6" asChild>
               <Link href="/whitepaper">
                 <ExternalLink className="mr-2 h-5 w-5" />
@@ -97,7 +97,7 @@ export default function LandingPage() {
               </Link>
             </Button>
 
-            {/* Download opens real file from /public */}
+            {/* Download real file from /public */}
             <Button size="lg" variant="secondary" className="rounded-2xl px-6" asChild>
               <a
                 href="/whitepaper/BetX_Whitepaper_v2.pdf"
@@ -295,9 +295,9 @@ export default function LandingPage() {
             <a href="#roadmap" className="hover:text-slate-200">Roadmap</a>
             <a href="#sale" className="hover:text-slate-200">Sale</a>
             <a href="#whitepaper" className="hover:text-slate-200">Whitepaper</a>
-            <a href="/tips" className="hover:text-slate-200">Tips</a>
-            <a href="/tipster" className="hover:text-slate-200">Tipster</a>
-            <a href="/bet" className="hover:text-slate-200">Bet</a>
+            <Link href="/tips" className="hover:text-slate-200">Tips</Link>
+            <Link href="/tipster" className="hover:text-slate-200">Tipster</Link>
+            <Link href="/bet" className="hover:text-slate-200">Bet</Link>
           </div>
         </div>
       </footer>
