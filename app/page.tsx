@@ -1,102 +1,305 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import React from "react";
+import Link from "next/link";
+import TokenomicsChart from "@/components/TokenomicsChart";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Check,
+  Rocket,
+  Shield,
+  Users,
+  Wallet,
+  TrendingUp,
+  ExternalLink,
+  Twitter,
+  MessageCircle,
+  Flame,
+  BarChart3,
+  Layers3,
+} from "lucide-react";
+
+/* ---------------- Tokenomics (sample numbers, change later) ---------------- */
+const TOKENOMICS = [
+  { name: "Liquidity", value: 35 },
+  { name: "Sale", value: 30 },
+  { name: "Ecosystem/Rewards", value: 15 },
+  { name: "Team (6m lock)", value: 10 },
+  { name: "Marketing", value: 7 },
+  { name: "Reserve", value: 3 },
+];
+
+const COLORS = ["#60a5fa", "#34d399", "#fbbf24", "#f472b6", "#f87171", "#a78bfa"];
+
+export default function LandingPage() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
+      {/* Header */}
+      <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-slate-900/70 bg-slate-900/60 border-b border-slate-800">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-2xl bg-gradient-to-tr from-cyan-400 to-emerald-500 grid place-items-center shadow-lg shadow-cyan-500/20">
+              <Flame className="h-5 w-5 text-white" />
+            </div>
+            <span className="font-bold text-lg tracking-tight text-slate-100">BetX</span>
+            <Badge className="ml-2" variant="secondary">SOL</Badge>
+          </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          <nav className="hidden md:flex items-center gap-6 text-sm">
+            <a href="#tokenomics" className="hover:text-white/90 text-slate-200">Tokenomics</a>
+            <a href="#features" className="hover:text-white/90 text-slate-200">Features</a>
+            <a href="#roadmap" className="hover:text-white/90 text-slate-200">Roadmap</a>
+            <a href="#sale" className="hover:text-white/90 text-slate-200">Sale</a>
+            <a href="/tips" className="hover:text-white/90 text-slate-200">Tips</a>
+            <a href="/tipster" className="hover:text-white/90 text-slate-200">Tipster</a>
+            <a href="/bet" className="hover:text-white/90 text-slate-200">Bet</a>
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <Button asChild size="sm" variant="secondary">
+              <a href="#sale">Join Sale</a>
+            </Button>
+            <Button asChild size="sm" variant="default">
+              <Link href="/whitepaper">Read Whitepaper</Link>
+            </Button>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </header>
+
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        {/* ক্লিক ব্লক ঠেকাতে -z-10 + pointer-events-none */}
+        <div className="absolute inset-0 -z-10 pointer-events-none opacity-30 bg-[radial-gradient(45rem_35rem_at_50%_0%,#2563eb_10%,transparent_60%)]" />
+        <div className="max-w-6xl mx-auto px-4 pt-20 pb-24 text-center">
+          <Badge variant="outline" className="mb-4 border-emerald-400/40 text-emerald-300">
+            Solana-powered tipster & betting hub
+          </Badge>
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight text-slate-100">
+            Bet smarter. <span className="text-emerald-400">Earn together.</span>
+          </h1>
+          <p className="mt-4 text-slate-300 max-w-2xl mx-auto">
+            BetX brings verified tipsters, tokenized rewards, and a phased betting rollout on Solana.
+            Start with Tips & Tipsters and a curated set of matches. Expand to full markets as we progress.
+          </p>
+
+          <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+            <Button size="lg" className="rounded-2xl px-6" asChild>
+              <a href="#sale"><Rocket className="mr-2 h-5 w-5" />Get in on the Sale</a>
+            </Button>
+
+            {/* Read works via Next.js route */}
+            <Button size="lg" variant="secondary" className="rounded-2xl px-6" asChild>
+              <Link href="/whitepaper">
+                <ExternalLink className="mr-2 h-5 w-5" />
+                Read Whitepaper
+              </Link>
+            </Button>
+
+            {/* Download opens real file from /public */}
+            <Button size="lg" variant="secondary" className="rounded-2xl px-6" asChild>
+              <a
+                href="/whitepaper/BetX_Whitepaper_v2.pdf"
+                target="_blank"
+                rel="noopener"
+                download
+              >
+                Download PDF
+              </a>
+            </Button>
+          </div>
+
+          <div className="mt-6 text-xs text-slate-400">
+            * Launch Phase: Tipster & Tips live, plus selective matches. Full betting comes in the final phase.
+          </div>
+        </div>
+      </section>
+
+      {/* Trust bar */}
+      <section className="border-y border-slate-800 bg-slate-900/30">
+        <div className="max-w-6xl mx-auto px-4 py-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+          <div className="flex items-center justify-center gap-2 text-slate-200"><Shield className="h-4 w-4" /> Smart contract audited</div>
+          <div className="flex items-center justify-center gap-2 text-slate-200"><Wallet className="h-4 w-4" /> Liquidity lock at TGE</div>
+          <div className="flex items-center justify-center gap-2 text-slate-200"><Users className="h-4 w-4" /> Community-first launch</div>
+          <div className="flex items-center justify-center gap-2 text-slate-200"><TrendingUp className="h-4 w-4" /> Transparent token flows</div>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section id="features" className="max-w-6xl mx-auto px-4 py-16">
+        <div className="grid md:grid-cols-4 gap-6">
+          <Card className="bg-slate-900/60 border-slate-800">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-slate-100"><BarChart3 className="h-5 w-5" /> Verified Tips Access</CardTitle>
+            </CardHeader>
+            <CardContent className="text-slate-300 text-sm leading-relaxed">
+              Stake or hold BETX to unlock curated, data-backed tips. See each tipster’s win-rate, ROI, and streak before you follow.
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-900/60 border-slate-800">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-slate-100"><Users className="h-5 w-5" /> Tipster Leaderboard</CardTitle>
+            </CardHeader>
+            <CardContent className="text-slate-300 text-sm leading-relaxed">
+              Top performers earn seasonal rewards from the ecosystem fund. Reputation is on-chain and portable.
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-900/60 border-slate-800">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-slate-100"><Layers3 className="h-5 w-5" /> Utility: BETX Token</CardTitle>
+            </CardHeader>
+            <CardContent className="text-slate-300 text-sm leading-relaxed">
+              Use BETX for tip unlocks, fee discounts, staking rewards, and governance. More utilities unlock as phases roll out.
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-900/60 border-slate-800">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-slate-100"><Shield className="h-5 w-5" /> Selective Matches at Launch</CardTitle>
+            </CardHeader>
+            <CardContent className="text-slate-300 text-sm leading-relaxed">
+              We start with a curated set of football, tennis, basketball and cricket matches to ensure quality and liquidity.
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Tokenomics */}
+      <section id="tokenomics" className="max-w-6xl mx-auto px-4 pb-4">
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-100">Tokenomics</h2>
+        <p className="mt-2 text-slate-300 text-sm max-w-3xl">
+          Supply: <span className="font-semibold text-slate-100">100,000,000 BETX</span> (fixed). Taxes: 0% on buys/sells (subject to governance).
+          Team tokens locked 6 months, then linear unlock 12 months. Liquidity locked for 12 months at launch.
+        </p>
+
+        <div className="mt-6 grid md:grid-cols-2 gap-6 items-center">
+          <Card className="bg-slate-900/60 border-slate-800">
+            <CardHeader><CardTitle className="text-slate-100">Distribution</CardTitle></CardHeader>
+            <CardContent><TokenomicsChart data={TOKENOMICS} colors={COLORS} /></CardContent>
+          </Card>
+
+          <Card className="bg-slate-900/60 border-slate-800">
+            <CardHeader><CardTitle className="text-slate-100">Key Parameters</CardTitle></CardHeader>
+            <CardContent className="text-sm text-slate-300 space-y-3">
+              <div className="flex items-start gap-2"><Check className="h-4 w-4 text-emerald-400 mt-1" /><div><span className="font-semibold text-slate-100">Chain:</span> Solana</div></div>
+              <div className="flex items-start gap-2"><Check className="h-4 w-4 text-emerald-400 mt-1" /><div><span className="font-semibold text-slate-100">Ticker:</span> BETX</div></div>
+              <div className="flex items-start gap-2"><Check className="h-4 w-4 text-emerald-400 mt-1" /><div><span className="font-semibold text-slate-100">Sale:</span> Public/Community Round (TBA)</div></div>
+              <div className="flex items-start gap-2"><Check className="h-4 w-4 text-emerald-400 mt-1" /><div><span className="font-semibold text-slate-100">Initial Liquidity:</span> 60–70% of raise, locked</div></div>
+              <div className="flex items-start gap-2"><Check className="h-4 w-4 text-emerald-400 mt-1" /><div><span className="font-semibold text-slate-100">Utilities at launch:</span> Tips access, tipster payouts, early fee discounts</div></div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Sale */}
+      <section id="sale" className="max-w-6xl mx-auto px-4 py-16">
+        <Card className="bg-slate-900/60 border-slate-800">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-slate-100">
+              <Rocket className="h-5 w-5" /> Token Sale
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-slate-300 text-sm">
+            <ul className="list-disc pl-5 space-y-2">
+              <li>Accepted: <span className="text-slate-100">SOL / USDC</span> • Vesting: none for public sale</li>
+              <li>Liquidity lock: <span className="text-slate-100">12 months</span> • Planned listing: <span className="text-slate-100">Raydium (TBA)</span></li>
+              <li>Compliance: KYC where required, Smart contract audited</li>
+            </ul>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Button asChild><a href="#" aria-disabled>Sale Link (TBA)</a></Button>
+              {/* Whitepaper buttons intentionally removed here */}
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
+      {/* Roadmap */}
+      <section id="roadmap" className="max-w-6xl mx-auto px-4 pb-16">
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-100">Roadmap</h2>
+        <div className="mt-6 grid md:grid-cols-4 gap-6">
+          <Card className="bg-slate-900/60 border-slate-800">
+            <CardHeader><CardTitle className="text-slate-100">Phase 1 • MVP</CardTitle></CardHeader>
+            <CardContent className="text-sm text-slate-300 space-y-2">
+              <p>Branding, site, token contract, audit, core community.</p>
+              <p>Launch <strong className="text-slate-100">Tipster</strong> & <strong className="text-slate-100">Tips</strong> with selective matches.</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-900/60 border-slate-800">
+            <CardHeader><CardTitle className="text-slate-100">Phase 2 • Sports+ & Growth</CardTitle></CardHeader>
+            <CardContent className="text-sm text-slate-300 space-y-2">
+              <p>More matches & markets across football, tennis, basketball, cricket.</p>
+              <p><strong className="text-slate-100">Heavy marketing</strong> (KOLs, affiliates, quests, regional campaigns).</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-900/60 border-slate-800">
+            <CardHeader><CardTitle className="text-slate-100">Phase 3 • Utilities</CardTitle></CardHeader>
+            <CardContent className="text-sm text-slate-300 space-y-2">
+              <p>BETX staking, fee discounts, governance voting.</p>
+              <p>Treasury dashboard & rewards automation.</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-slate-900/60 border-slate-800">
+            <CardHeader><CardTitle className="text-slate-100">Phase 4 • Full Betting & Listings</CardTitle></CardHeader>
+            <CardContent className="text-sm text-slate-300 space-y-2">
+              <p>Full market rollout with deep liquidity.</p>
+              <p><strong className="text-slate-100">Exchange listings</strong>: CEX listings; ongoing marketing scale-up.</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Whitepaper anchor */}
+      <section id="whitepaper" className="max-w-6xl mx-auto px-4 pb-8">
+        <Card className="bg-slate-900/60 border-slate-800">
+          <CardHeader><CardTitle className="text-slate-100">Whitepaper</CardTitle></CardHeader>
+          <CardContent className="text-slate-300 text-sm space-y-3">
+            <p>The whitepaper covers the protocol design, tokenomics, utilities, reward loops, and compliance posture.</p>
+            <div className="flex flex-wrap gap-3">
+              <Button asChild><Link href="/whitepaper">Read in browser</Link></Button>
+              <Button variant="secondary" asChild>
+                <a href="/whitepaper/BetX_Whitepaper_v2.pdf" target="_blank" rel="noopener" download>
+                  Download PDF
+                </a>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
+      {/* Community */}
+      <section id="community" className="max-w-6xl mx-auto px-4 pb-24">
+        <Card className="bg-slate-900/60 border-slate-800">
+          <CardHeader><CardTitle className="text-slate-100">Join the community</CardTitle></CardHeader>
+          <CardContent className="flex flex-wrap gap-3">
+            <Button asChild variant="secondary"><a href="#"><Twitter className="h-4 w-4 mr-2" />Twitter</a></Button>
+            <Button asChild variant="secondary"><a href="#"><MessageCircle className="h-4 w-4 mr-2" />Telegram</a></Button>
+          </CardContent>
+        </Card>
+        <p className="mt-6 text-xs text-slate-500">
+          Disclaimer: Availability of betting features may be restricted by local laws. This site is for informational purposes, not financial or betting advice.
+        </p>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-800 bg-slate-900/50">
+        <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-400">
+          <div>© {new Date().getFullYear()} BetX Protocol. All rights reserved.</div>
+          <div className="flex items-center gap-4">
+            <a href="#tokenomics" className="hover:text-slate-200">Tokenomics</a>
+            <a href="#roadmap" className="hover:text-slate-200">Roadmap</a>
+            <a href="#sale" className="hover:text-slate-200">Sale</a>
+            <a href="#whitepaper" className="hover:text-slate-200">Whitepaper</a>
+            <a href="/tips" className="hover:text-slate-200">Tips</a>
+            <a href="/tipster" className="hover:text-slate-200">Tipster</a>
+            <a href="/bet" className="hover:text-slate-200">Bet</a>
+          </div>
+        </div>
       </footer>
     </div>
   );
