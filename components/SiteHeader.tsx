@@ -12,7 +12,9 @@ export default function SiteHeader() {
 
   const navLinks = [
     { href: '/#tokenomics', label: 'Tokenomics' },
+    { href: '/#features', label: 'Features' },
     { href: '/#roadmap', label: 'Roadmap' },
+    { href: '/#sale', label: 'Sale' },
     { href: '/tips', label: 'Tips' },
     { href: '/tipster', label: 'Tipster' },
     { href: '/bet', label: 'Bet' },
@@ -43,10 +45,13 @@ export default function SiteHeader() {
           ))}
         </nav>
 
-        {/* CTAs */}
+        {/* Desktop CTAs */}
         <div className="hidden md:flex items-center gap-2">
           <Button asChild size="sm" variant="secondary">
-            <Link href="/#sale">Sale</Link>
+            <Link href="/#sale">Join Sale</Link>
+          </Button>
+          <Button asChild size="sm" variant="default">
+            <Link href="/whitepaper">Read Whitepaper</Link>
           </Button>
           <ConnectButton chainStatus="icon" showBalance={false} accountStatus="address" />
         </div>
@@ -54,6 +59,7 @@ export default function SiteHeader() {
         {/* Mobile Menu Button */}
         <button
           className="md:hidden text-white"
+          aria-label="Toggle menu"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -75,10 +81,14 @@ export default function SiteHeader() {
               </Link>
             ))}
 
-            {/* CTAs in mobile */}
+            {/* Mobile CTAs */}
             <Button asChild size="sm" variant="secondary" className="w-full">
-              <Link href="/#sale" onClick={() => setMenuOpen(false)}>Sale</Link>
+              <Link href="/#sale" onClick={() => setMenuOpen(false)}>Join Sale</Link>
             </Button>
+            <Button asChild size="sm" variant="default" className="w-full">
+              <Link href="/whitepaper" onClick={() => setMenuOpen(false)}>Read Whitepaper</Link>
+            </Button>
+
             <div className="w-full">
               <ConnectButton chainStatus="icon" showBalance={false} accountStatus="address" />
             </div>

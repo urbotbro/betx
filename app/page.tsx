@@ -21,7 +21,6 @@ import {
   Layers3,
 } from "lucide-react";
 
-/* ---------------- Tokenomics (sample numbers, change later) ---------------- */
 const TOKENOMICS = [
   { name: "Liquidity", value: 35 },
   { name: "Sale", value: 30 },
@@ -36,41 +35,9 @@ const COLORS = ["#60a5fa", "#34d399", "#fbbf24", "#f472b6", "#f87171", "#a78bfa"
 export default function LandingPage() {
   return (
     <div className="min-h-screen pb-safe bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
-      {/* Header */}
-      <header className="sticky top-0 z-50 safe-pt backdrop-blur supports-[backdrop-filter]:bg-slate-900/70 bg-slate-900/60 border-b border-slate-800">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-2xl bg-gradient-to-tr from-cyan-400 to-emerald-500 grid place-items-center shadow-lg shadow-cyan-500/20">
-              <Flame className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-bold text-lg tracking-tight text-slate-100">BetX</span>
-            <Badge className="ml-2" variant="secondary">SOL</Badge>
-          </div>
-
-          <nav className="hidden md:flex items-center gap-6 text-sm">
-            <a href="#tokenomics" className="hover:text-white/90 text-slate-200">Tokenomics</a>
-            <a href="#features" className="hover:text-white/90 text-slate-200">Features</a>
-            <a href="#roadmap" className="hover:text-white/90 text-slate-200">Roadmap</a>
-            <a href="#sale" className="hover:text-white/90 text-slate-200">Sale</a>
-            <Link href="/tips" className="hover:text-white/90 text-slate-200">Tips</Link>
-            <Link href="/tipster" className="hover:text-white/90 text-slate-200">Tipster</Link>
-            <Link href="/bet" className="hover:text-white/90 text-slate-200">Bet</Link>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <Button asChild size="sm" variant="secondary">
-              <a href="#sale">Join Sale</a>
-            </Button>
-            <Button asChild size="sm" variant="default">
-              <Link href="/whitepaper">Read Whitepaper</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        {/* pointer blocking fix */}
         <div className="absolute inset-0 -z-10 pointer-events-none opacity-30 bg-[radial-gradient(45rem_35rem_at_50%_0%,#2563eb_10%,transparent_60%)]" />
         <div className="max-w-6xl mx-auto px-4 pt-20 pb-24 text-center">
           <Badge variant="outline" className="mb-4 border-emerald-400/40 text-emerald-300">
@@ -88,16 +55,12 @@ export default function LandingPage() {
             <Button size="lg" className="rounded-2xl px-6" asChild>
               <a href="#sale"><Rocket className="mr-2 h-5 w-5" />Get in on the Sale</a>
             </Button>
-
-            {/* Read via Next.js route */}
             <Button size="lg" variant="secondary" className="rounded-2xl px-6" asChild>
               <Link href="/whitepaper">
                 <ExternalLink className="mr-2 h-5 w-5" />
                 Read Whitepaper
               </Link>
             </Button>
-
-            {/* Download real file from /public */}
             <Button size="lg" variant="secondary" className="rounded-2xl px-6" asChild>
               <a
                 href="/whitepaper/BetX_Whitepaper_v2.pdf"
@@ -210,7 +173,6 @@ export default function LandingPage() {
             </ul>
             <div className="mt-4 flex flex-wrap gap-3">
               <Button asChild><a href="#" aria-disabled>Sale Link (TBA)</a></Button>
-              {/* Whitepaper buttons intentionally removed here */}
             </div>
           </CardContent>
         </Card>
@@ -281,26 +243,7 @@ export default function LandingPage() {
             <Button asChild variant="secondary"><a href="#"><MessageCircle className="h-4 w-4 mr-2" />Telegram</a></Button>
           </CardContent>
         </Card>
-        <p className="mt-6 text-xs text-slate-500">
-          Disclaimer: Availability of betting features may be restricted by local laws. This site is for informational purposes, not financial or betting advice.
-        </p>
       </section>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-800 bg-slate-900/50">
-        <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-400">
-          <div>© {new Date().getFullYear()} BetX Protocol. All rights reserved.</div>
-          <div className="flex items-center gap-4">
-            <a href="#tokenomics" className="hover:text-slate-200">Tokenomics</a>
-            <a href="#roadmap" className="hover:text-slate-200">Roadmap</a>
-            <a href="#sale" className="hover:text-slate-200">Sale</a>
-            <a href="#whitepaper" className="hover:text-slate-200">Whitepaper</a>
-            <Link href="/tips" className="hover:text-slate-200">Tips</Link>
-            <Link href="/tipster" className="hover:text-slate-200">Tipster</Link>
-            <Link href="/bet" className="hover:text-slate-200">Bet</Link>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
