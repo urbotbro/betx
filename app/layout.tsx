@@ -1,8 +1,9 @@
-// app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
+import SiteHeader from "../components/SiteHeader";
+import SiteFooter from "../components/SiteFooter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,7 +26,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Mobile scaling + notch safe-area */}
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, viewport-fit=cover"
@@ -43,12 +43,10 @@ export default function RootLayout({
         }}
       >
         <Providers>
-          {/* Full height flex container */}
           <div className="isolate flex flex-col min-h-dvh">
-            {/* Main scrollable content */}
-            <main className="flex-1 w-full">
-              {children}
-            </main>
+            <SiteHeader />
+            <main className="flex-1 w-full">{children}</main>
+            <SiteFooter />
           </div>
         </Providers>
       </body>
