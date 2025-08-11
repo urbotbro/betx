@@ -65,6 +65,14 @@ type UserRec = { id: string; email: string; username: string; password: string }
 
 /* ===== UTILS ===== */
 const r2 = (n: number) => Math.round(n * 100) / 100;
+const fmtLocal = (ts: number) =>
+  new Date(ts).toLocaleString(undefined, {
+    weekday: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    month: 'short',
+    day: '2-digit',
+  });
 
 /* ===== TIME BADGE (hydration-safe) ===== */
 function TimeBadge({ ts, enabled }: { ts: number; enabled: boolean }) {
@@ -308,37 +316,33 @@ export default function BetPage() {
     Cricket: '🏏',
   };
 
-  /* balances dropdown */
-  const [balancesOpen, setBalancesOpen] = useState(false);
-  const balancesRef = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
-    function onDocClick(e: MouseEvent) {
-      if (!balancesRef.current) return;
-      if (!balancesRef.current.contains(e.target as Node)) setBalancesOpen(false);
-    }
-    function onEsc(e: KeyboardEvent) {
-      if (e.key === 'Escape') setBalancesOpen(false);
-    }
-    document.addEventListener('click', onDocClick);
-    document.addEventListener('keydown', onEsc);
-    return () => {
-      document.removeEventListener('click', onDocClick);
-      document.removeEventListener('keydown', onEsc);
-    };
-  }, []);
+  /* Trending click → scroll to card */
+  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const [highlightId, setHighlightId] = useState<string | null>(null);
+  function focusMatch(m: Match) {
+    setSport(m.sport);
+    setTimeout(() => {
+      const el = cardRefs.current[m.id];
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setHighlightId(m.id);
+        setTimeout(() => setHighlightId(null), 1500);
+      }
+    }, 30);
+  }
 
   return (
     <div className={pageBg}>
       {/* TOP BAR — brand + auth only */}
       <header className="sticky top-0 z-50 w-full backdrop-blur supports-[backdrop-filter]:bg-slate-900/70 bg-slate-900/60 border-b border-slate-800">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2" aria-label="NovaBet home">
+          <Link href="/" className="flex items-center gap-2" aria-label="BetX home">
             <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-blue-500 grid place-items-center text-white">
               🔥
             </div>
-            <span className="font-bold tracking-tight text-slate-100">NovaBet Protocol</span>
+            <span className="font-bold tracking-tight text-slate-100">BetX</span>
             <Badge variant="secondary" className="ml-2">
-              BEP-20
+              SOL
             </Badge>
           </Link>
 
@@ -380,29 +384,20 @@ export default function BetPage() {
         </div>
       </header>
 
-      {/* Balances — dropdown; বড় গ্যাপ দিয়ে হেডার কাট-অফ এড়ানো */}
-      <div className="max-w-6xl mx-auto px-4 mt-16 md:mt-20 py-2">
-        <div ref={balancesRef} className="relative inline-block">
-          <Button
-            variant="secondary"
-            className="rounded-xl"
-            onClick={() => setBalancesOpen((v) => !v)}
-          >
-            Balances
-          </Button>
-          {balancesOpen && (
-            <div className="absolute mt-2 w-60 rounded-xl border border-slate-700 bg-slate-900/95 shadow-xl p-2">
-              {(['USDT', 'BTC', 'ETH', 'BETX'] as const).map((c) => (
-                <div
-                  key={c}
-                  className="flex items-center justify-between px-2 py-2 rounded-lg hover:bg-slate-800/70"
-                >
-                  <span className="text-slate-300">{c}</span>
-                  <span className="font-mono text-slate-100">{balances[c] ?? 0}</span>
-                </div>
-              ))}
-            </div>
-          )}
+      {/* Balances — ইনলাইন চিপস */}
+      <div className="max-w-6xl mx-auto px-4 mt-6 md:mt-8 py-2">
+        <div className="flex items-center gap-2 text-xs overflow-x-auto no-scrollbar">
+          <span className="text-slate-300 mr-1 shrink-0">Balances:</span>
+          {(['USDT', 'BTC', 'ETH', 'BETX'] as const).map((c) => (
+            <Badge
+              key={c}
+              variant="outline"
+              className="font-mono text-slate-100 border-slate-600 shrink-0"
+              title={c}
+            >
+              {c}: {balances[c] ?? 0}
+            </Badge>
+          ))}
         </div>
       </div>
 
@@ -434,22 +429,23 @@ export default function BetPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               {trending.map((m) => (
-                <div
+                <button
                   key={m.id}
-                  className="rounded-lg bg-slate-900/85 border border-slate-700 p-3 text-sm text-slate-200"
+                  onClick={() => focusMatch(m)}
+                  className="w-full text-left rounded-lg bg-slate-900/85 border border-slate-700 p-3 text-sm text-slate-200 hover:bg-slate-800/70"
                 >
                   <div className="flex items-center justify-between">
                     <div className="font-semibold text-slate-100 truncate">
                       {m.teamA} vs {m.teamB}
                     </div>
-                    <Badge variant="secondary">
+                    <Badge variant="secondary" title="Starts in">
                       <TimeBadge ts={m.startTs} enabled={isReady} />
                     </Badge>
                   </div>
                   <div className="text-slate-300">
-                    {m.league} • {m.sport}
+                    {m.league} • {m.sport} • {fmtLocal(m.startTs)}
                   </div>
-                </div>
+                </button>
               ))}
             </CardContent>
           </Card>
@@ -477,15 +473,26 @@ export default function BetPage() {
           {/* Match grid */}
           <div className="grid lg:grid-cols-2 gap-6">
             {list.map((m) => (
-              <Card key={m.id} className={panel}>
+              <Card
+                key={m.id}
+                className={`${panel} transition-all ${
+                  highlightId === m.id ? 'ring-2 ring-sky-500' : ''
+                }`}
+                ref={(el) => (cardRefs.current[m.id] = el)}
+              >
                 <CardHeader>
                   <CardTitle className="text-base flex items-center justify-between text-slate-100">
                     <span className="flex items-center gap-2">
                       <CalendarClock className="h-4 w-4" /> {m.league}
                     </span>
-                    <Badge variant="secondary">
-                      <TimeBadge ts={m.startTs} enabled={isReady} />
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-slate-300 hidden sm:inline">
+                        {fmtLocal(m.startTs)}
+                      </span>
+                      <Badge variant="secondary" title="Starts in">
+                        <TimeBadge ts={m.startTs} enabled={isReady} />
+                      </Badge>
+                    </div>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3 text-sm text-slate-200">
