@@ -62,6 +62,19 @@ type Match = {
 };
 type Pick = { id: string; matchId: string; sport: Sport; label: string; odds: number };
 type UserRec = { id: string; email: string; username: string; password: string };
+type Coin = 'USDT' | 'BTC' | 'ETH' | 'BETX';
+
+type TicketStatus = 'pending' | 'won' | 'lost';
+type Ticket = {
+  ticketId: string;
+  mode: 'single' | 'parlay';
+  stake: number;
+  currency: Coin;
+  picks: Pick[];
+  potential: number;
+  placedAt: number;
+  status: TicketStatus;
+};
 
 /* ===== UTILS ===== */
 const r2 = (n: number) => Math.round(n * 100) / 100;
@@ -212,14 +225,31 @@ export default function BetPage() {
     } catch {}
   };
 
-  const [currency, setCurrency] = useState<'USDT' | 'BTC' | 'ETH' | 'BETX'>('USDT');
+  const [bets, setBets] = useState<Ticket[]>([]);
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(`bets:${userKey}`) || '[]');
+      setBets(Array.isArray(saved) ? saved : []);
+    } catch {
+      setBets([]);
+    }
+  }, [userKey]);
+  const saveBets = (arr: Ticket[]) => {
+    setBets(arr);
+    try {
+      localStorage.setItem(`bets:${userKey}`, JSON.stringify(arr));
+    } catch {}
+  };
+
+  const [currency, setCurrency] = useState<Coin>('USDT');
   const dep = DEPOSIT_ADDRESSES[currency];
 
-  const [betCurrency, setBetCurrency] = useState<'USDT' | 'BTC' | 'ETH' | 'BETX'>('USDT');
+  const [betCurrency, setBetCurrency] = useState<Coin>('USDT');
   const [sport, setSport] = useState<Sport>('Football');
   const [slip, setSlip] = useState<Pick[]>([]);
   const [mode, setMode] = useState<'single' | 'parlay'>('parlay');
   const [stake, setStake] = useState<number>(50);
+  const [betTab, setBetTab] = useState<'slip' | 'mybets'>('slip');
 
   const trending = useMemo(() => MATCHES.filter((m) => m.trending), [MATCHES]);
   const list = useMemo(() => MATCHES.filter((m) => m.sport === sport), [MATCHES, sport]);
@@ -261,7 +291,7 @@ export default function BetPage() {
   };
 
   // demo withdraw
-  const demoWithdraw = (amount: number, coin: 'USDT' | 'BTC' | 'ETH' | 'BETX') => {
+  const demoWithdraw = (amount: number, coin: Coin) => {
     if (!user) {
       alert('Please sign up / log in first.');
       return;
@@ -300,12 +330,44 @@ export default function BetPage() {
     }
     const next = { ...balances, [betCurrency]: r2(avail - stake) };
     saveBalances(next);
-    const ticket = Math.random().toString(36).slice(2, 8).toUpperCase();
+    const ticketId = Math.random().toString(36).slice(2, 8).toUpperCase();
+    const ticket: Ticket = {
+      ticketId,
+      mode,
+      stake,
+      currency: betCurrency,
+      picks: slip,
+      potential: payout.potential,
+      placedAt: Date.now(),
+      status: 'pending',
+    };
+    const newBets = [ticket, ...bets];
+    saveBets(newBets);
     alert(
-      `🎟️ Bet placed (demo)\nTicket: ${ticket}\nMode: ${mode.toUpperCase()} • ` +
+      `🎟️ Bet placed (demo)\nTicket: ${ticketId}\nMode: ${mode.toUpperCase()} • ` +
         `Stake: ${stake} ${betCurrency}\nPotential: ${payout.potential} ${betCurrency}`
     );
     clearSlip();
+    setBetTab('mybets');
+  };
+
+  /* Settle a bet (demo) */
+  const settleBet = (ticketId: string, outcome: 'won' | 'lost') => {
+    const idx = bets.findIndex((b) => b.ticketId === ticketId);
+    if (idx === -1) return;
+    const b = bets[idx];
+    if (b.status !== 'pending') return; // already settled
+    const updated = [...bets];
+    updated[idx] = { ...b, status: outcome };
+    saveBets(updated);
+    if (outcome === 'won') {
+      // credit full potential (stake already deducted on place)
+      const credited = r2((balances[b.currency] ?? 0) + b.potential);
+      saveBalances({ ...balances, [b.currency]: credited });
+      alert(`✅ Ticket ${ticketId} settled: WIN. Credited ${b.potential} ${b.currency} (demo).`);
+    } else {
+      alert(`❌ Ticket ${ticketId} settled: LOSS (demo).`);
+    }
   };
 
   /* emoji icons for tabs */
@@ -451,7 +513,7 @@ export default function BetPage() {
           </Card>
         </div>
 
-        {/* Right: Matches + Slip */}
+        {/* Right: Matches + Slip / My Bets */}
         <div className="lg:col-span-2 space-y-6">
           {/* Sport tabs */}
           <div className="flex flex-wrap gap-2">
@@ -518,136 +580,213 @@ export default function BetPage() {
             ))}
           </div>
 
-          {/* Bet slip */}
+          {/* Bet slip + My Bets tabs */}
           <div className="lg:sticky lg:top-20">
             <Card className={panel}>
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2 text-slate-100">
-                    <Calculator className="h-5 w-5" /> Bet slip
+                    <Calculator className="h-5 w-5" /> {betTab === 'slip' ? 'Bet slip' : 'My Bets'}
                   </CardTitle>
-                  {slip.length > 0 && <span className={chip}>{slip.length} pick(s)</span>}
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      size="sm"
+                      variant={betTab === 'slip' ? 'default' : 'secondary'}
+                      className="rounded-full"
+                      onClick={() => setBetTab('slip')}
+                    >
+                      Slip
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant={betTab === 'mybets' ? 'default' : 'secondary'}
+                      className="rounded-full"
+                      onClick={() => setBetTab('mybets')}
+                    >
+                      My Bets
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-4 text-sm text-slate-200">
-                {!slip.length ? (
-                  <div className="text-slate-300">No selections yet. Tap odds to add picks.</div>
-                ) : (
-                  <>
-                    <div className="flex items-center gap-4">
-                      <label className="flex items-center gap-2 text-slate-200">
-                        <input
-                          type="radio"
-                          checked={mode === 'parlay'}
-                          onChange={() => setMode('parlay')}
-                        />{' '}
-                        Parlay
-                      </label>
-                      <label className="flex items-center gap-2 text-slate-200">
-                        <input
-                          type="radio"
-                          checked={mode === 'single'}
-                          onChange={() => setMode('single')}
-                        />{' '}
-                        Singles (equal split)
-                      </label>
-                    </div>
 
-                    <div className="space-y-2">
-                      {slip.map((p) => (
-                        <div
-                          key={p.id}
-                          className="rounded-lg bg-slate-900/85 border border-slate-700 p-3 flex items-center gap-3"
-                        >
-                          <Badge>{p.sport}</Badge>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-slate-100 truncate">{p.label}</div>
-                            <div className="text-slate-300 text-xs">Odds @{p.odds.toFixed(2)}</div>
-                          </div>
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            className="rounded-lg"
-                            onClick={() => removePick(p.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-3 items-end">
-                      <div className="md:col-span-2">
-                        <label className="block text-slate-200 mb-1">
-                          {mode === 'parlay'
-                            ? `Stake (${betCurrency})`
-                            : `Total stake (${betCurrency})`}
+              {/* Slip tab */}
+              {betTab === 'slip' ? (
+                <CardContent className="space-y-4 text-sm text-slate-200">
+                  {!slip.length ? (
+                    <div className="text-slate-300">No selections yet. Tap odds to add picks.</div>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-4">
+                        <label className="flex items-center gap-2 text-slate-200">
+                          <input
+                            type="radio"
+                            checked={mode === 'parlay'}
+                            onChange={() => setMode('parlay')}
+                          />{' '}
+                          Parlay
                         </label>
-                        <input
-                          type="number"
-                          min={1}
-                          className={`w-full ${field}`}
-                          value={stake}
-                          onChange={(e) => setStake(Number(e.target.value))}
-                        />
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {[10, 25, 50].map((v) => (
+                        <label className="flex items-center gap-2 text-slate-200">
+                          <input
+                            type="radio"
+                            checked={mode === 'single'}
+                            onChange={() => setMode('single')}
+                          />{' '}
+                          Singles (equal split)
+                        </label>
+                      </div>
+
+                      <div className="space-y-2">
+                        {slip.map((p) => (
+                          <div
+                            key={p.id}
+                            className="rounded-lg bg-slate-900/85 border border-slate-700 p-3 flex items-center gap-3"
+                          >
+                            <Badge>{p.sport}</Badge>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-slate-100 truncate">{p.label}</div>
+                              <div className="text-slate-300 text-xs">Odds @{p.odds.toFixed(2)}</div>
+                            </div>
                             <Button
-                              key={v}
                               size="sm"
                               variant="secondary"
                               className="rounded-lg"
-                              onClick={() => setStake(v)}
+                              onClick={() => removePick(p.id)}
                             >
-                              +{v}
+                              <Trash2 className="h-4 w-4" />
                             </Button>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="grid md:grid-cols-3 gap-3 items-end">
+                        <div className="md:col-span-2">
+                          <label className="block text-slate-200 mb-1">
+                            {mode === 'parlay'
+                              ? `Stake (${betCurrency})`
+                              : `Total stake (${betCurrency})`}
+                          </label>
+                          <input
+                            type="number"
+                            min={1}
+                            className={`w-full ${field}`}
+                            value={stake}
+                            onChange={(e) => setStake(Number(e.target.value))}
+                          />
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {[10, 25, 50].map((v) => (
+                              <Button
+                                key={v}
+                                size="sm"
+                                variant="secondary"
+                                className="rounded-lg"
+                                onClick={() => setStake(v)}
+                              >
+                                +{v}
+                              </Button>
+                            ))}
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              className="rounded-lg"
+                              onClick={() => setStake(Math.floor(balances[betCurrency] || 0))}
+                            >
+                              MAX
+                            </Button>
+                            <select
+                              className="ml-auto bg-slate-900/85 text-slate-100 border border-slate-700 rounded-lg px-2 py-1 text-xs"
+                              value={betCurrency}
+                              onChange={(e) => setBetCurrency(e.target.value as any)}
+                            >
+                              <option value="USDT">Bet in USDT</option>
+                              <option value="BTC">Bet in BTC</option>
+                              <option value="ETH">Bet in ETH</option>
+                              <option value="BETX">Bet in BETX</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div className="rounded-xl bg-slate-900/85 border border-slate-700 p-3">
+                          <div className="text-slate-300 text-xs">Potential return</div>
+                          <div className="text-slate-100 font-semibold text-lg">
+                            {payout.potential} {betCurrency}
+                          </div>
+                          <div className="text-slate-300 text-[11px]">{payout.details}</div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <Button variant="secondary" className="rounded-xl" onClick={clearSlip}>
+                          Clear
+                        </Button>
+                        <Button className="rounded-xl" onClick={placeBet} disabled={!user}>
+                          Place bet (demo)
+                        </Button>
+                      </div>
+
+                      {!user && (
+                        <div className="text-[11px] text-amber-300">
+                          Sign up or log in to place bets.
+                        </div>
+                      )}
+                    </>
+                  )}
+                </CardContent>
+              ) : (
+                /* My Bets tab */
+                <CardContent className="space-y-3 text-sm text-slate-200">
+                  {!bets.length ? (
+                    <div className="text-slate-300">No bets yet.</div>
+                  ) : (
+                    bets.map((b) => (
+                      <div
+                        key={b.ticketId}
+                        className="rounded-lg bg-slate-900/85 border border-slate-700 p-3"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="font-semibold text-slate-100">
+                            Ticket #{b.ticketId}{' '}
+                            <span className="text-slate-400 font-normal">• {fmtLocal(b.placedAt)}</span>
+                          </div>
+                          <StatusBadge status={b.status} />
+                        </div>
+                        <div className="text-slate-300">
+                          {b.mode.toUpperCase()} • Stake {b.stake} {b.currency} • Potential{' '}
+                          {b.potential} {b.currency}
+                        </div>
+                        <div className="mt-2 grid gap-1">
+                          {b.picks.map((p, i) => (
+                            <div key={p.id} className="text-xs text-slate-300">
+                              {i + 1}. {p.sport} — {p.label} @ {p.odds.toFixed(2)}
+                            </div>
                           ))}
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            className="rounded-lg"
-                            onClick={() => setStake(Math.floor(balances[betCurrency] || 0))}
-                          >
-                            MAX
-                          </Button>
-                          <select
-                            className="ml-auto bg-slate-900/85 text-slate-100 border border-slate-700 rounded-lg px-2 py-1 text-xs"
-                            value={betCurrency}
-                            onChange={(e) => setBetCurrency(e.target.value as any)}
-                          >
-                            <option value="USDT">Bet in USDT</option>
-                            <option value="BTC">Bet in BTC</option>
-                            <option value="ETH">Bet in ETH</option>
-                            <option value="BETX">Bet in BETX</option>
-                          </select>
                         </div>
+                        {b.status === 'pending' ? (
+                          <div className="mt-3 flex gap-2">
+                            <Button
+                              size="sm"
+                              className="rounded-lg"
+                              onClick={() => settleBet(b.ticketId, 'won')}
+                            >
+                              Mark Win
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="secondary"
+                              className="rounded-lg"
+                              onClick={() => settleBet(b.ticketId, 'lost')}
+                            >
+                              Mark Loss
+                            </Button>
+                          </div>
+                        ) : (
+                          <div className="mt-2 text-xs text-slate-400">
+                            Settled as <strong className="text-slate-200">{b.status.toUpperCase()}</strong>
+                          </div>
+                        )}
                       </div>
-                      <div className="rounded-xl bg-slate-900/85 border border-slate-700 p-3">
-                        <div className="text-slate-300 text-xs">Potential return</div>
-                        <div className="text-slate-100 font-semibold text-lg">
-                          {payout.potential} {betCurrency}
-                        </div>
-                        <div className="text-slate-300 text-[11px]">{payout.details}</div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <Button variant="secondary" className="rounded-xl" onClick={clearSlip}>
-                        Clear
-                      </Button>
-                      <Button className="rounded-xl" onClick={placeBet} disabled={!user}>
-                        Place bet (demo)
-                      </Button>
-                    </div>
-
-                    {!user && (
-                      <div className="text-[11px] text-amber-300">
-                        Sign up or log in to place bets.
-                      </div>
-                    )}
-                  </>
-                )}
-              </CardContent>
+                    ))
+                  )}
+                </CardContent>
+              )}
             </Card>
           </div>
         </div>
@@ -725,6 +864,16 @@ function OddsBtn({
       <span className="font-mono">@{odds.toFixed(2)}</span>
     </Button>
   );
+}
+
+function StatusBadge({ status }: { status: TicketStatus }) {
+  const styles =
+    status === 'won'
+      ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-200'
+      : status === 'lost'
+      ? 'bg-rose-500/15 border-rose-500/40 text-rose-200'
+      : 'bg-slate-700/40 border-slate-600 text-slate-200';
+  return <span className={`px-2 py-0.5 rounded-full text-xs border ${styles}`}>{status}</span>;
 }
 
 function AuthModal({
@@ -933,7 +1082,7 @@ function DemoCredit({
   onCredit,
   disabled,
 }: {
-  currency: 'USDT' | 'BTC' | 'ETH' | 'BETX';
+  currency: Coin;
   onCredit: (amt: number) => void;
   disabled?: boolean;
 }) {
@@ -979,15 +1128,15 @@ function WalletCard({
   onWithdraw,
 }: {
   userPresent: boolean;
-  currency: 'USDT' | 'BTC' | 'ETH' | 'BETX';
-  setCurrency: (c: 'USDT' | 'BTC' | 'ETH' | 'BETX') => void;
+  currency: Coin;
+  setCurrency: (c: Coin) => void;
   dep: { address: string; network: string; note?: string };
   onCredit: (amt: number) => void;
   balances: Record<string, number>;
-  onWithdraw: (amount: number, coin: 'USDT' | 'BTC' | 'ETH' | 'BETX') => void;
+  onWithdraw: (amount: number, coin: Coin) => void;
 }) {
   const [tab, setTab] = useState<'deposit' | 'withdraw'>('deposit');
-  const [wdCoin, setWdCoin] = useState<'USDT' | 'BTC' | 'ETH' | 'BETX'>('USDT');
+  const [wdCoin, setWdCoin] = useState<Coin>('USDT');
   const [wdAmount, setWdAmount] = useState<number>(25);
   const [wdAddr, setWdAddr] = useState('');
 
@@ -1027,7 +1176,7 @@ function WalletCard({
               <select
                 className={`w-full ${field}`}
                 value={currency}
-                onChange={(e) => setCurrency(e.target.value as any)}
+                onChange={(e) => setCurrency(e.target.value as Coin)}
                 disabled={!userPresent}
               >
                 <option value="USDT">USDT (BEP-20)</option>
@@ -1074,7 +1223,7 @@ function WalletCard({
               <select
                 className={field}
                 value={wdCoin}
-                onChange={(e) => setWdCoin(e.target.value as any)}
+                onChange={(e) => setWdCoin(e.target.value as Coin)}
                 disabled={!userPresent}
               >
                 <option value="USDT">USDT (BEP-20)</option>
@@ -1132,10 +1281,10 @@ function WithdrawCard({
   disabled,
 }: {
   balances: Record<string, number>;
-  onWithdraw: (amount: number, coin: 'USDT' | 'BTC' | 'ETH' | 'BETX') => void;
+  onWithdraw: (amount: number, coin: Coin) => void;
   disabled?: boolean;
 }) {
-  const [coin, setCoin] = useState<'USDT' | 'BTC' | 'ETH' | 'BETX'>('USDT');
+  const [coin, setCoin] = useState<Coin>('USDT');
   const [amount, setAmount] = useState<number>(25);
   const [address, setAddress] = useState('');
   return (
@@ -1150,7 +1299,7 @@ function WithdrawCard({
           <select
             className={field}
             value={coin}
-            onChange={(e) => setCoin(e.target.value as any)}
+            onChange={(e) => setCoin(e.target.value as Coin)}
             disabled={disabled}
           >
             <option value="USDT">USDT (BEP-20)</option>
