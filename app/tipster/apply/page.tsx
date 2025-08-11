@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -85,6 +85,8 @@ export default function ApplyAsTipster() {
   });
 
   const [showStakeBox, setShowStakeBox] = useState(false);
+  const stakeBoxRef = useRef<HTMLDivElement | null>(null);
+  const shouldScrollToStake = useRef(false);
 
   // hydrate a fresh reference code for a new session if missing
   useEffect(() => {
@@ -92,6 +94,17 @@ export default function ApplyAsTipster() {
       setApp((p) => ({ ...p, stakeReference: makeRefCode() }));
     }
   }, [app.stakeReference]);
+
+  // if we toggled stake box open from the CTA, scroll to it after render
+  useEffect(() => {
+    if (showStakeBox && shouldScrollToStake.current) {
+      // small delay to ensure it’s in the DOM
+      setTimeout(() => {
+        stakeBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        shouldScrollToStake.current = false;
+      }, 30);
+    }
+  }, [showStakeBox]);
 
   function saveLocal(a: Application) {
     try {
@@ -118,7 +131,13 @@ export default function ApplyAsTipster() {
     setApp(payload);
     saveLocal(payload);
     setShowStakeBox(true); // immediately show manual stake instructions
+    shouldScrollToStake.current = true;
     alert('✅ Application submitted. Next: complete your BETX stake and submit the tx hash.');
+  }
+
+  function openStakeBoxAndScroll() {
+    setShowStakeBox(true);
+    shouldScrollToStake.current = true;
   }
 
   function submitStakeProof() {
@@ -211,7 +230,7 @@ export default function ApplyAsTipster() {
                 To list, stake at least <strong>{app.minStake} BETX</strong> to our escrow address and paste the
                 transaction hash here. We verify off-chain and mark your stake as <em>verified</em>.
               </p>
-              <Button onClick={() => setShowStakeBox(true)} className="rounded-xl w-full">
+              <Button onClick={openStakeBoxAndScroll} className="rounded-xl w-full">
                 View Stake Instructions
               </Button>
               <p className="text-xs text-slate-300">
@@ -292,8 +311,7 @@ export default function ApplyAsTipster() {
                     type="number"
                     className="w-full rounded-xl bg-slate-800/60 border border-slate-700 px-3 py-2 outline-none focus:ring-2 focus:ring-sky-600"
                     value={app.baseFee}
-                    onChange={(e)=>setApp(p=>({...p, baseFee: Number(e.target.value)}))}
-                    min={0}
+                    onChange={(e)=>setApp(p=>({...p, baseFee: Number(e.target.value)}))} min={0}
                   />
                   <p className="text-[11px] text-slate-400 mt-1">You keep this even if the pick loses.</p>
                 </div>
@@ -303,8 +321,7 @@ export default function ApplyAsTipster() {
                     type="number"
                     className="w-full rounded-xl bg-slate-800/60 border border-slate-700 px-3 py-2 outline-none focus:ring-2 focus:ring-sky-600"
                     value={app.bonusFee}
-                    onChange={(e)=>setApp(p=>({...p, bonusFee: Number(e.target.value)}))}
-                    min={0}
+                    onChange={(e)=>setApp(p=>({...p, bonusFee: Number(e.target.value)}))} min={0}
                   />
                   <p className="text-[11px] text-slate-400 mt-1">Paid only if the pick wins (buyer credit otherwise).</p>
                 </div>
@@ -314,8 +331,7 @@ export default function ApplyAsTipster() {
                     type="number"
                     className="w-full rounded-xl bg-slate-800/60 border border-slate-700 px-3 py-2 outline-none focus:ring-2 focus:ring-sky-600"
                     value={app.minStake}
-                    onChange={(e)=>setApp(p=>({...p, minStake: Number(e.target.value)}))}
-                    min={100}
+                    onChange={(e)=>setApp(p=>({...p, minStake: Number(e.target.value)}))} min={100}
                   />
                   <p className="text-[11px] text-slate-400 mt-1">Required to list. Helps align incentives.</p>
                 </div>
@@ -361,11 +377,7 @@ export default function ApplyAsTipster() {
               </div>
 
               <div className="flex gap-2">
-                <Button
-                  className="rounded-xl"
-                  disabled={!canSubmit}
-                  onClick={submit}
-                >
+                <Button className="rounded-xl" disabled={!canSubmit} onClick={submit}>
                   <CheckCircle2 className="h-4 w-4 mr-2" />
                   Submit application
                 </Button>
@@ -382,7 +394,7 @@ export default function ApplyAsTipster() {
 
           {/* Manual stake box */}
           {showStakeBox && (
-            <Card className="bg-sky-900/25 border-sky-800/40">
+            <Card ref={stakeBoxRef} className="bg-sky-900/25 border-sky-800/40">
               <CardHeader>
                 <CardTitle className="text-slate-100">Stake BETX (manual verification)</CardTitle>
               </CardHeader>
@@ -424,8 +436,13 @@ export default function ApplyAsTipster() {
                     <div className="text-slate-100 font-semibold">{app.minStake} BETX</div>
                   </div>
                   <div className="rounded-xl bg-slate-900/60 border border-slate-800 p-3">
-                    <div className="text-slate-300 text-xs mb-1">Your contact</div>
-                    <div className="text-slate-100">{app.contacts || '—'}</div>
+                    <label className="text-slate-300 text-xs mb-1 block">Your contact</label>
+                    <input
+                      className="w-full rounded-lg bg-slate-800/60 border border-slate-700 px-2 py-1 outline-none focus:ring-2 focus:ring-sky-600 text-slate-100"
+                      placeholder="@yourhandle or you@example.com"
+                      value={app.contacts}
+                      onChange={(e)=>setApp(p=>({...p, contacts: e.target.value}))}
+                    />
                   </div>
                 </div>
 
