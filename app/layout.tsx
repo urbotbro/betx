@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
-import SiteHeader from "@/components/SiteHeader";
-import SiteFooter from "@/components/SiteFooter";
+import Chrome from "./Chrome"; // ⬅️ নতুন গেট
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,9 +43,8 @@ export default function RootLayout({
       >
         <Providers>
           <div className="isolate flex flex-col min-h-dvh">
-            <SiteHeader />
-            <main className="flex-1 w-full">{children}</main>
-            <SiteFooter />
+            {/* গ্লোবাল হেডার/ফুটার এখন Chrome গেট কন্ট্রোল করবে */}
+            <Chrome>{children}</Chrome>
           </div>
         </Providers>
       </body>
