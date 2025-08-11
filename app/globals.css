@@ -1,5 +1,9 @@
+/* app/globals.css */
+
+/* Tailwind core (v4 syntax) */
 @import "tailwindcss";
 
+/* Dark variant helper */
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -42,6 +46,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* Light palette */
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -75,8 +80,12 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+
+  /* Scroll offset so anchored sections (#tokenomics) header-এ ঢেকে না যায় */
+  scroll-padding-top: 72px;
 }
 
+/* Dark palette */
 .dark {
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
@@ -111,11 +120,47 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
+/* Base layer */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html,
+  body {
+    height: 100%;
+  }
   body {
     @apply bg-background text-foreground;
+    min-height: 100dvh;
+    /* মোবাইলে হরাইজন্টাল স্ক্রল কেটে দেয়া */
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
   }
+}
+
+/* Safe-area fixes (iOS/Android notches) */
+@supports (padding: max(0px)) {
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* যেকোনো sticky header যেন notch-এর নিচে বসে */
+  header.sticky {
+    top: max(env(safe-area-inset-top), 0px);
+  }
+}
+
+/* Optional helpers: class দিয়েও ব্যবহার করতে পারবেন */
+.safe-pt { padding-top: env(safe-area-inset-top); }
+.safe-pb { padding-bottom: env(safe-area-inset-bottom); }
+.safe-pl { padding-left: env(safe-area-inset-left); }
+.safe-pr { padding-right: env(safe-area-inset-right); }
+
+/* ছোট মোবাইলে কার্ড/কন্টেইনার ফাঁক একটু বেশি দিন */
+@media (max-width: 380px) {
+  .compact-space > * + * { margin-top: 0.5rem; }
 }

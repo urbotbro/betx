@@ -78,7 +78,7 @@ const TIPSTERS: Tipster[] = [
 export default function TipsterPage() {
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<SortKey>('roi');
-  const [connected, setConnected] = useState(false);
+  const [connected, setConnected] = useState(false); // চাইলে সরিয়েও দিতে পারেন (শুধু warning এড়াতে)
 
   const list = useMemo(() => {
     const q = query.toLowerCase();
@@ -92,12 +92,12 @@ export default function TipsterPage() {
   }, [query, sort]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
+    <div className="min-h-screen pb-safe bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
       <SiteHeader />
 
-      {/* Top bar: back + connect */}
-      <div className="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
-        <Button variant="secondary" className="rounded-xl" onClick={()=>history.back()}>
+      {/* Top bar: back + connect — হেডারের নিচে স্পেস */}
+      <div className="max-w-6xl mx-auto px-4 mt-16 md:mt-20 py-6 flex items-center justify-between">
+        <Button variant="secondary" className="rounded-xl" onClick={() => window.history.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" /> Back
         </Button>
         <ConnectWalletButton onChange={setConnected} />
@@ -176,7 +176,6 @@ export default function TipsterPage() {
                       </span>
                       <span className="text-slate-100">{t.name}</span>
                     </span>
-                    {/* ডার্ক থিমে ব্যাজ টেক্সট ভিজিবল */}
                     <Badge className="bg-slate-800 text-slate-100 border border-slate-700">{streakLabel}</Badge>
                   </CardTitle>
                 </CardHeader>

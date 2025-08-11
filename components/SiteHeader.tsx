@@ -7,9 +7,12 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 export default function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-slate-900/70 bg-slate-900/60 border-b border-slate-800">
+    <header
+      /* safe-pt = mobile notch safe area padding (globals.css এ ডিফাইন্ড) */
+      className="sticky top-0 z-50 safe-pt w-full backdrop-blur supports-[backdrop-filter]:bg-slate-900/70 bg-slate-900/60 border-b border-slate-800"
+    >
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        {/* Logo / Brand */}
+        {/* Brand */}
         <Link href="/" aria-label="BetX home" className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-emerald-500 grid place-items-center text-white">
             🔥
@@ -18,13 +21,23 @@ export default function SiteHeader() {
           <Badge variant="secondary" className="ml-2">SOL</Badge>
         </Link>
 
-        {/* Nav */}
+        {/* Nav (desktop) */}
         <nav className="hidden md:flex items-center gap-6 text-sm">
-          <Link href="/#tokenomics" className="hover:text-white/90 text-slate-200">Tokenomics</Link>
-          <Link href="/#roadmap" className="hover:text-white/90 text-slate-200">Roadmap</Link>
-          <Link href="/tips" className="hover:text-white/90 text-slate-200">Tips</Link>
-          <Link href="/tipster" className="hover:text-white/90 text-slate-200">Tipster</Link>
-          <Link href="/bet" className="hover:text-white/90 text-slate-200">Bet</Link>
+          <Link href="/#tokenomics" className="hover:text-white/90 text-slate-200">
+            Tokenomics
+          </Link>
+          <Link href="/#roadmap" className="hover:text-white/90 text-slate-200">
+            Roadmap
+          </Link>
+          <Link href="/tips" className="hover:text-white/90 text-slate-200">
+            Tips
+          </Link>
+          <Link href="/tipster" className="hover:text-white/90 text-slate-200">
+            Tipster
+          </Link>
+          <Link href="/bet" className="hover:text-white/90 text-slate-200">
+            Bet
+          </Link>
         </nav>
 
         {/* CTAs */}
@@ -32,6 +45,7 @@ export default function SiteHeader() {
           <Button asChild size="sm" variant="secondary">
             <Link href="/#sale">Sale</Link>
           </Button>
+          {/* RainbowKit connect */}
           <ConnectButton chainStatus="icon" showBalance={false} accountStatus="address" />
         </div>
       </div>

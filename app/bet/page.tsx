@@ -13,7 +13,7 @@ import {
 
 /* ====== THEME ====== */
 const pageBg =
-  'min-h-screen text-slate-100 bg-[radial-gradient(90rem_70rem_at_50%_-10%,#223047_10%,#0f172a_50%,#0b1220_100%)]';
+  'min-h-screen pb-safe text-slate-100 bg-[radial-gradient(90rem_70rem_at_50%_-10%,#223047_10%,#0f172a_50%,#0b1220_100%)]';
 const panel = 'bg-slate-800/70 border-slate-700 backdrop-blur';
 const field = 'rounded-xl bg-slate-900/85 text-slate-100 border border-slate-700 px-3 py-2 outline-none focus:ring-2 focus:ring-sky-600';
 const chip = 'px-2.5 py-1 rounded-full text-xs bg-sky-500/15 text-sky-200 border border-sky-500/30';
@@ -197,14 +197,14 @@ export default function BetPage() {
       {/* TOP BAR */}
       <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-slate-900/70 bg-slate-900/60 border-b border-slate-800">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2" aria-label="NovaBet home">
             <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-blue-500 grid place-items-center text-white">🔥</div>
             <span className="font-bold tracking-tight text-slate-100">NovaBet Protocol</span>
             <Badge variant="secondary" className="ml-2">BEP-20</Badge>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm">
-            <a href="/#tokenomics" className="hover:text-white/90 text-slate-200">Tokenomics</a>
-            <a href="/#roadmap" className="hover:text-white/90 text-slate-200">Roadmap</a>
+            <Link href="/#tokenomics" className="hover:text-white/90 text-slate-200">Tokenomics</Link>
+            <Link href="/#roadmap" className="hover:text-white/90 text-slate-200">Roadmap</Link>
             <Link href="/tips" className="hover:text-white/90 text-slate-200">Tips</Link>
             <Link href="/tipster" className="hover:text-white/90 text-slate-200">Tipster</Link>
             <Link href="/bet" className="hover:text-white/90 text-slate-200">Bet</Link>
@@ -228,9 +228,9 @@ export default function BetPage() {
         </div>
       </header>
 
-      {/* Balances */}
-      <div className="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
-        <Button variant="secondary" className="rounded-xl" onClick={()=>history.back()}>
+      {/* Balances (হেডারের নিচে সেফ স্পেস) */}
+      <div className="max-w-6xl mx-auto px-4 mt-16 md:mt-20 py-6 flex items-center justify-between">
+        <Button variant="secondary" className="rounded-xl" onClick={()=>window.history.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" /> Back
         </Button>
         <div className="flex items-center gap-2 text-xs">
@@ -313,7 +313,7 @@ export default function BetPage() {
 
         {/* Right: Matches + Slip */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Sport tabs (emoji icons) */}
+          {/* Sport tabs */}
           <div className="flex flex-wrap gap-2">
             {(['Football','Tennis','Basketball','Cricket'] as Sport[]).map(s => (
               <Button
@@ -340,7 +340,7 @@ export default function BetPage() {
                 <CardContent className="space-y-3 text-sm text-slate-200">
                   <div className="font-semibold text-slate-100">{m.teamA} vs {m.teamB}</div>
 
-                  {/* Odds buttons — fixed height, no overflow */}
+                  {/* Odds buttons */}
                   <div className="grid grid-cols-3 gap-2">
                     <OddsBtn label={m.teamA} odds={m.odds.A} onClick={()=>addPick(m,'A')} />
                     {m.market==='1x2' ? <OddsBtn label="Draw" odds={m.odds.Draw || 0} onClick={()=>addPick(m,'Draw')} /> : <div />}

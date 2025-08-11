@@ -35,9 +35,9 @@ const COLORS = ["#60a5fa", "#34d399", "#fbbf24", "#f472b6", "#f87171", "#a78bfa"
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
+    <div className="min-h-screen pb-safe bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-slate-900/70 bg-slate-900/60 border-b border-slate-800">
+      <header className="sticky top-0 z-50 safe-pt backdrop-blur supports-[backdrop-filter]:bg-slate-900/70 bg-slate-900/60 border-b border-slate-800">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-9 w-9 rounded-2xl bg-gradient-to-tr from-cyan-400 to-emerald-500 grid place-items-center shadow-lg shadow-cyan-500/20">
@@ -127,7 +127,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features */}
-      <section id="features" className="max-w-6xl mx-auto px-4 py-16">
+      <section id="features" className="scroll-mt-24 md:scroll-mt-28 max-w-6xl mx-auto px-4 py-16">
         <div className="grid md:grid-cols-4 gap-6">
           <Card className="bg-slate-900/60 border-slate-800">
             <CardHeader>
@@ -168,7 +168,7 @@ export default function LandingPage() {
       </section>
 
       {/* Tokenomics */}
-      <section id="tokenomics" className="max-w-6xl mx-auto px-4 pb-4">
+      <section id="tokenomics" className="scroll-mt-24 md:scroll-mt-28 max-w-6xl mx-auto px-4 pb-4">
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-100">Tokenomics</h2>
         <p className="mt-2 text-slate-300 text-sm max-w-3xl">
           Supply: <span className="font-semibold text-slate-100">100,000,000 BETX</span> (fixed). Taxes: 0% on buys/sells (subject to governance).
@@ -195,7 +195,7 @@ export default function LandingPage() {
       </section>
 
       {/* Sale */}
-      <section id="sale" className="max-w-6xl mx-auto px-4 py-16">
+      <section id="sale" className="scroll-mt-24 md:scroll-mt-28 max-w-6xl mx-auto px-4 py-16">
         <Card className="bg-slate-900/60 border-slate-800">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-slate-100">
@@ -217,7 +217,7 @@ export default function LandingPage() {
       </section>
 
       {/* Roadmap */}
-      <section id="roadmap" className="max-w-6xl mx-auto px-4 pb-16">
+      <section id="roadmap" className="scroll-mt-24 md:scroll-mt-28 max-w-6xl mx-auto px-4 pb-16">
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-100">Roadmap</h2>
         <div className="mt-6 grid md:grid-cols-4 gap-6">
           <Card className="bg-slate-900/60 border-slate-800">
@@ -255,7 +255,7 @@ export default function LandingPage() {
       </section>
 
       {/* Whitepaper anchor */}
-      <section id="whitepaper" className="max-w-6xl mx-auto px-4 pb-8">
+      <section id="whitepaper" className="scroll-mt-24 md:scroll-mt-28 max-w-6xl mx-auto px-4 pb-8">
         <Card className="bg-slate-900/60 border-slate-800">
           <CardHeader><CardTitle className="text-slate-100">Whitepaper</CardTitle></CardHeader>
           <CardContent className="text-slate-300 text-sm space-y-3">
@@ -273,7 +273,7 @@ export default function LandingPage() {
       </section>
 
       {/* Community */}
-      <section id="community" className="max-w-6xl mx-auto px-4 pb-24">
+      <section id="community" className="scroll-mt-24 md:scroll-mt-28 max-w-6xl mx-auto px-4 pb-24">
         <Card className="bg-slate-900/60 border-slate-800">
           <CardHeader><CardTitle className="text-slate-100">Join the community</CardTitle></CardHeader>
           <CardContent className="flex flex-wrap gap-3">
