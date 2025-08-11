@@ -40,8 +40,8 @@ const DEPOSIT_ADDRESSES: Record<
     network: 'ERC-20 (Ethereum)',
     note: 'Send only ERC-20 ETH.',
   },
-  NOVA: {
-    address: '0xNOVA-DEMO-ADDR-00112233445566',
+  BETX: {
+    address: '0xBETX-DEMO-ADDR-00112233445566',
     network: 'BEP-20 (BSC)',
     note: 'Project token on BSC.',
   },
@@ -189,12 +189,12 @@ export default function BetPage() {
     USDT: 0,
     BTC: 0,
     ETH: 0,
-    NOVA: 0,
+    BETX: 0,
   });
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(`balances:${userKey}`) || '{}');
-      setBalances({ USDT: 0, BTC: 0, ETH: 0, NOVA: 0, ...saved });
+      setBalances({ USDT: 0, BTC: 0, ETH: 0, BETX: 0, ...saved });
     } catch {}
   }, [userKey]);
   const saveBalances = (next: Record<string, number>) => {
@@ -204,10 +204,10 @@ export default function BetPage() {
     } catch {}
   };
 
-  const [currency, setCurrency] = useState<'USDT' | 'BTC' | 'ETH' | 'NOVA'>('USDT');
+  const [currency, setCurrency] = useState<'USDT' | 'BTC' | 'ETH' | 'BETX'>('USDT');
   const dep = DEPOSIT_ADDRESSES[currency];
 
-  const [betCurrency, setBetCurrency] = useState<'USDT' | 'BTC' | 'ETH' | 'NOVA'>('USDT');
+  const [betCurrency, setBetCurrency] = useState<'USDT' | 'BTC' | 'ETH' | 'BETX'>('USDT');
   const [sport, setSport] = useState<Sport>('Football');
   const [slip, setSlip] = useState<Pick[]>([]);
   const [mode, setMode] = useState<'single' | 'parlay'>('parlay');
@@ -253,7 +253,7 @@ export default function BetPage() {
   };
 
   // demo withdraw
-  const demoWithdraw = (amount: number, coin: 'USDT' | 'BTC' | 'ETH' | 'NOVA') => {
+  const demoWithdraw = (amount: number, coin: 'USDT' | 'BTC' | 'ETH' | 'BETX') => {
     if (!user) {
       alert('Please sign up / log in first.');
       return;
@@ -316,14 +316,21 @@ export default function BetPage() {
       if (!balancesRef.current) return;
       if (!balancesRef.current.contains(e.target as Node)) setBalancesOpen(false);
     }
+    function onEsc(e: KeyboardEvent) {
+      if (e.key === 'Escape') setBalancesOpen(false);
+    }
     document.addEventListener('click', onDocClick);
-    return () => document.removeEventListener('click', onDocClick);
+    document.addEventListener('keydown', onEsc);
+    return () => {
+      document.removeEventListener('click', onDocClick);
+      document.removeEventListener('keydown', onEsc);
+    };
   }, []);
 
   return (
     <div className={pageBg}>
       {/* TOP BAR — brand + auth only */}
-      <header className="sticky top-0 z-50 safe-pt w-full backdrop-blur supports-[backdrop-filter]:bg-slate-900/70 bg-slate-900/60 border-b border-slate-800">
+      <header className="sticky top-0 z-50 w-full backdrop-blur supports-[backdrop-filter]:bg-slate-900/70 bg-slate-900/60 border-b border-slate-800">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2" aria-label="NovaBet home">
             <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-blue-500 grid place-items-center text-white">
@@ -373,8 +380,8 @@ export default function BetPage() {
         </div>
       </header>
 
-      {/* Balances — dropdown instead of long row */}
-      <div className="max-w-6xl mx-auto px-4 mt-4 md:mt-6 py-2">
+      {/* Balances — dropdown; বড় গ্যাপ দিয়ে হেডার কাট-অফ এড়ানো */}
+      <div className="max-w-6xl mx-auto px-4 mt-16 md:mt-20 py-2">
         <div ref={balancesRef} className="relative inline-block">
           <Button
             variant="secondary"
@@ -384,8 +391,8 @@ export default function BetPage() {
             Balances
           </Button>
           {balancesOpen && (
-            <div className="absolute mt-2 w-56 rounded-xl border border-slate-700 bg-slate-900/95 shadow-lg p-2">
-              {(['USDT', 'BTC', 'ETH', 'NOVA'] as const).map((c) => (
+            <div className="absolute mt-2 w-60 rounded-xl border border-slate-700 bg-slate-900/95 shadow-xl p-2">
+              {(['USDT', 'BTC', 'ETH', 'BETX'] as const).map((c) => (
                 <div
                   key={c}
                   className="flex items-center justify-between px-2 py-2 rounded-lg hover:bg-slate-800/70"
@@ -604,7 +611,7 @@ export default function BetPage() {
                             <option value="USDT">Bet in USDT</option>
                             <option value="BTC">Bet in BTC</option>
                             <option value="ETH">Bet in ETH</option>
-                            <option value="NOVA">Bet in NOVA</option>
+                            <option value="BETX">Bet in BETX</option>
                           </select>
                         </div>
                       </div>
@@ -919,7 +926,7 @@ function DemoCredit({
   onCredit,
   disabled,
 }: {
-  currency: 'USDT' | 'BTC' | 'ETH' | 'NOVA';
+  currency: 'USDT' | 'BTC' | 'ETH' | 'BETX';
   onCredit: (amt: number) => void;
   disabled?: boolean;
 }) {
@@ -965,15 +972,15 @@ function WalletCard({
   onWithdraw,
 }: {
   userPresent: boolean;
-  currency: 'USDT' | 'BTC' | 'ETH' | 'NOVA';
-  setCurrency: (c: 'USDT' | 'BTC' | 'ETH' | 'NOVA') => void;
+  currency: 'USDT' | 'BTC' | 'ETH' | 'BETX';
+  setCurrency: (c: 'USDT' | 'BTC' | 'ETH' | 'BETX') => void;
   dep: { address: string; network: string; note?: string };
   onCredit: (amt: number) => void;
   balances: Record<string, number>;
-  onWithdraw: (amount: number, coin: 'USDT' | 'BTC' | 'ETH' | 'NOVA') => void;
+  onWithdraw: (amount: number, coin: 'USDT' | 'BTC' | 'ETH' | 'BETX') => void;
 }) {
   const [tab, setTab] = useState<'deposit' | 'withdraw'>('deposit');
-  const [wdCoin, setWdCoin] = useState<'USDT' | 'BTC' | 'ETH' | 'NOVA'>('USDT');
+  const [wdCoin, setWdCoin] = useState<'USDT' | 'BTC' | 'ETH' | 'BETX'>('USDT');
   const [wdAmount, setWdAmount] = useState<number>(25);
   const [wdAddr, setWdAddr] = useState('');
 
@@ -1019,7 +1026,7 @@ function WalletCard({
                 <option value="USDT">USDT (BEP-20)</option>
                 <option value="BTC">BTC</option>
                 <option value="ETH">ETH (ERC-20)</option>
-                <option value="NOVA">NOVA (BEP-20)</option>
+                <option value="BETX">BETX (BEP-20)</option>
               </select>
             </div>
 
@@ -1066,7 +1073,7 @@ function WalletCard({
                 <option value="USDT">USDT (BEP-20)</option>
                 <option value="BTC">BTC</option>
                 <option value="ETH">ETH</option>
-                <option value="NOVA">NOVA</option>
+                <option value="BETX">BETX</option>
               </select>
               <input
                 type="number"
@@ -1086,7 +1093,7 @@ function WalletCard({
               disabled={!userPresent}
             />
             <div className="text-xs text-slate-300">
-              Available:{' '}
+              Available{' '}
               <span className="text-slate-100">
                 {balances[wdCoin] ?? 0} {wdCoin}
               </span>
@@ -1118,10 +1125,10 @@ function WithdrawCard({
   disabled,
 }: {
   balances: Record<string, number>;
-  onWithdraw: (amount: number, coin: 'USDT' | 'BTC' | 'ETH' | 'NOVA') => void;
+  onWithdraw: (amount: number, coin: 'USDT' | 'BTC' | 'ETH' | 'BETX') => void;
   disabled?: boolean;
 }) {
-  const [coin, setCoin] = useState<'USDT' | 'BTC' | 'ETH' | 'NOVA'>('USDT');
+  const [coin, setCoin] = useState<'USDT' | 'BTC' | 'ETH' | 'BETX'>('USDT');
   const [amount, setAmount] = useState<number>(25);
   const [address, setAddress] = useState('');
   return (
@@ -1142,7 +1149,7 @@ function WithdrawCard({
             <option value="USDT">USDT (BEP-20)</option>
             <option value="BTC">BTC</option>
             <option value="ETH">ETH</option>
-            <option value="NOVA">NOVA</option>
+            <option value="BETX">BETX</option>
           </select>
           <input
             type="number"
