@@ -1,13 +1,12 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import ConnectWalletButton from '@/components/ConnectWalletButton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
   Trophy, Percent, TrendingUp, Search, Filter,
-  Users, Shield, Info, ArrowLeft
+  Users, Shield, Info
 } from 'lucide-react';
 
 type Tipster = {
@@ -77,7 +76,6 @@ const TIPSTERS: Tipster[] = [
 export default function TipsterPage() {
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<SortKey>('roi');
-  const [connected, setConnected] = useState(false);
 
   const list = useMemo(() => {
     const q = query.toLowerCase();
@@ -92,12 +90,11 @@ export default function TipsterPage() {
 
   return (
     <div className="min-h-screen pb-safe bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 pt-16 md:pt-20">
-      {/* Top bar: back + connect */}
-      <div className="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
-        <Button variant="secondary" className="rounded-xl" onClick={() => window.history.back()}>
-          <ArrowLeft className="h-4 w-4 mr-2" /> Back
+      {/* Top bar area (replacing old wallet connect): Apply as tipster */}
+      <div className="max-w-6xl mx-auto px-4 py-6 flex items-center justify-end">
+        <Button asChild className="rounded-xl">
+          <a href="/tipster/apply">Apply as tipster</a>
         </Button>
-        <ConnectWalletButton onChange={setConnected} />
       </div>
 
       <div className="max-w-6xl mx-auto px-4 pb-10">
@@ -219,13 +216,10 @@ export default function TipsterPage() {
                     </div>
                   </div>
 
-                  {/* CTAs */}
-                  <div className="flex gap-2">
-                    <Button asChild className="w-1/2 rounded-xl">
+                  {/* CTA: only "View tips" (apply button removed here) */}
+                  <div className="flex">
+                    <Button asChild className="w-full rounded-xl">
                       <a href="/tips">View tips</a>
-                    </Button>
-                    <Button asChild variant="secondary" className="w-1/2 rounded-xl">
-                      <a href="/tipster/apply">Apply as tipster</a>
                     </Button>
                   </div>
 
