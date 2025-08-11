@@ -11,8 +11,10 @@ import { Menu, X } from 'lucide-react';
 export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const isLanding = pathname === '/';           // landing page
-  const showConnect = !isLanding;               // hide connect on landing only
+
+  // Hide the Connect button on these routes
+  const HIDE_CONNECT_ON = ['/', '/tips', '/tipster'];
+  const showConnect = !HIDE_CONNECT_ON.includes(pathname);
 
   const navLinks = [
     { href: '/#tokenomics', label: 'Tokenomics' },
@@ -95,7 +97,7 @@ export default function SiteHeader() {
               <Link href="/whitepaper" onClick={() => setMenuOpen(false)}>Read Whitepaper</Link>
             </Button>
 
-            {/* Hide connect on landing only */}
+            {/* Hide connect on selected routes */}
             {showConnect && (
               <div className="w-full">
                 <ConnectButton chainStatus="icon" showBalance={false} accountStatus="address" />
