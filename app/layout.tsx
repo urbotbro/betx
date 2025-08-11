@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Safe-area + proper scaling for iOS/Android */}
+        {/* Mobile scaling + notch safe-area */}
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, viewport-fit=cover"
@@ -34,8 +34,7 @@ export default function RootLayout({
       </head>
 
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-dvh bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100`}
-        // Safe-area padding so header/footer না কাটা যায়
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100`}
         style={{
           paddingTop: "env(safe-area-inset-top)",
           paddingBottom: "env(safe-area-inset-bottom)",
@@ -44,8 +43,7 @@ export default function RootLayout({
         }}
       >
         <Providers>
-          {/* isolate so header dropshadow/blur ঠিকমতো কাজ করে */}
-          <div className="isolate min-h-dvh flex flex-col">
+          <div className="isolate flex flex-col min-h-dvh">
             {children}
           </div>
         </Providers>
