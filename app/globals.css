@@ -6,6 +6,7 @@
 /* Dark variant helper */
 @custom-variant dark (&:is(.dark *));
 
+/* Theme variables */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -126,14 +127,29 @@
   }
   html,
   body {
-    height: 100%;
+    min-height: 100%;
+    height: auto;
   }
   body {
     @apply bg-background text-foreground;
+    display: flex;
+    flex-direction: column;
     min-height: 100dvh;
     overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
     text-rendering: optimizeLegibility;
+  }
+  #__next,
+  body > div:first-child {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  main {
+    flex: 1 0 auto;
+  }
+  footer {
+    flex-shrink: 0;
   }
 }
 

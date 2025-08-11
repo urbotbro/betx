@@ -43,8 +43,12 @@ export default function RootLayout({
         }}
       >
         <Providers>
+          {/* Full height flex container */}
           <div className="isolate flex flex-col min-h-dvh">
-            {children}
+            {/* Main scrollable content */}
+            <main className="flex-1 w-full">
+              {children}
+            </main>
           </div>
         </Providers>
       </body>
