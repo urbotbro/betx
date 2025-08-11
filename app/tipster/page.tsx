@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import SiteHeader from '@/components/SiteHeader';
 import ConnectWalletButton from '@/components/ConnectWalletButton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -78,7 +77,7 @@ const TIPSTERS: Tipster[] = [
 export default function TipsterPage() {
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<SortKey>('roi');
-  const [connected, setConnected] = useState(false); // চাইলে সরিয়েও দিতে পারেন (শুধু warning এড়াতে)
+  const [connected, setConnected] = useState(false);
 
   const list = useMemo(() => {
     const q = query.toLowerCase();
@@ -92,11 +91,9 @@ export default function TipsterPage() {
   }, [query, sort]);
 
   return (
-    <div className="min-h-screen pb-safe bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
-      <SiteHeader />
-
-      {/* Top bar: back + connect — হেডারের নিচে স্পেস */}
-      <div className="max-w-6xl mx-auto px-4 mt-16 md:mt-20 py-6 flex items-center justify-between">
+    <div className="min-h-screen pb-safe bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 pt-16 md:pt-20">
+      {/* Top bar: back + connect */}
+      <div className="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
         <Button variant="secondary" className="rounded-xl" onClick={() => window.history.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" /> Back
         </Button>

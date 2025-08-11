@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import SiteHeader from '@/components/SiteHeader';
 import ConnectWalletButton from '@/components/ConnectWalletButton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -26,7 +25,6 @@ type Tip = {
 
 type SortKey = 'soon' | 'winrate' | 'price';
 
-// Demo tips
 const TIPS: Tip[] = [
   {
     id: 't1',
@@ -56,7 +54,7 @@ const TIPS: Tip[] = [
     match: 'Real Madrid vs Fenerbahçe',
     hiddenMarket: 'Home -4.5 (AH)',
     hiddenOdds: 1.70,
-    cutoff: new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString(),
+    cutoff: new Date(Date.now() + 3 * 60 * 1000 * 60).toISOString(),
     tipster: { name: 'CourtIQ', winRate: 61, roi: 9.3, streak: -1 },
     priceNOVA: 16,
     pickReveal: 'Real Madrid -4.5 @1.70 (pace-up angle, bench edge)',
@@ -92,11 +90,9 @@ export default function TipsPage() {
   }
 
   return (
-    <div className="min-h-screen pb-safe bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
-      <SiteHeader />
-
-      {/* Top bar: back + connect (header-এর নিচে স্পেস) */}
-      <div className="max-w-6xl mx-auto px-4 mt-16 md:mt-20 py-6 flex items-center justify-between">
+    <div className="min-h-screen pb-safe bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 pt-16 md:pt-20">
+      {/* Top bar: back + connect */}
+      <div className="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
         <Button variant="secondary" className="rounded-xl" onClick={() => window.history.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" /> Back
         </Button>
@@ -180,7 +176,6 @@ export default function TipsPage() {
                 <CardContent className="space-y-3 text-sm text-slate-300">
                   <div className="font-semibold text-slate-100">{tip.match}</div>
 
-                  {/* LOCKED: details hidden until unlock */}
                   <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800">
                     {!tip.unlocked ? (
                       <div className="space-y-1">
@@ -199,7 +194,6 @@ export default function TipsPage() {
                     )}
                   </div>
 
-                  {/* Tipster metrics */}
                   <div className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2 text-slate-200">
                       <Trophy className="h-4 w-4" />
@@ -213,7 +207,6 @@ export default function TipsPage() {
                     </div>
                   </div>
 
-                  {/* CTA */}
                   {!tip.unlocked ? (
                     <Button className="w-full rounded-xl text-slate-100" onClick={() => unlockTip(tip.id)}>
                       <Unlock className="h-4 w-4 mr-2" />

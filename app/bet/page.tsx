@@ -189,47 +189,14 @@ export default function BetPage() {
     clearSlip();
   };
 
-  /* emoji icons for tabs */
   const SPORT_ICONS: Record<Sport,string> = { Football:'⚽', Tennis:'🎾', Basketball:'🏀', Cricket:'🏏' };
 
   return (
     <div className={pageBg}>
-      {/* TOP BAR */}
-      <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-slate-900/70 bg-slate-900/60 border-b border-slate-800">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2" aria-label="NovaBet home">
-            <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-blue-500 grid place-items-center text-white">🔥</div>
-            <span className="font-bold tracking-tight text-slate-100">NovaBet Protocol</span>
-            <Badge variant="secondary" className="ml-2">BEP-20</Badge>
-          </Link>
-          <nav className="hidden md:flex items-center gap-6 text-sm">
-            <Link href="/#tokenomics" className="hover:text-white/90 text-slate-200">Tokenomics</Link>
-            <Link href="/#roadmap" className="hover:text-white/90 text-slate-200">Roadmap</Link>
-            <Link href="/tips" className="hover:text-white/90 text-slate-200">Tips</Link>
-            <Link href="/tipster" className="hover:text-white/90 text-slate-200">Tipster</Link>
-            <Link href="/bet" className="hover:text-white/90 text-slate-200">Bet</Link>
-          </nav>
-          <div className="flex items-center gap-2">
-            {user ? (
-              <>
-                <Badge variant="secondary" className="hidden sm:inline-flex">{user.username}</Badge>
-                <Link href="#" className="text-sm text-sky-300 hover:underline flex items-center gap-1"><User className="h-4 w-4" /> Profile</Link>
-                <Link href="#" className="text-sm text-sky-300 hover:underline flex items-center gap-1"><ShieldCheck className="h-4 w-4" /> KYC / Age</Link>
-                <Link href="#" className="text-sm text-sky-300 hover:underline flex items-center gap-1"><Settings className="h-4 w-4" /> Settings</Link>
-                <Button size="sm" variant="secondary" className="rounded-xl" onClick={signOut}>Sign out</Button>
-              </>
-            ) : (
-              <>
-                <Button size="sm" className="rounded-xl" onClick={()=>setShowSignup(true)}><UserPlus className="h-4 w-4 mr-2" /> Sign up</Button>
-                <Button size="sm" variant="secondary" className="rounded-xl" onClick={()=>setShowLogin(true)}><LogIn className="h-4 w-4 mr-2" /> Log in</Button>
-              </>
-            )}
-          </div>
-        </div>
-      </header>
+      {/* হেডার নেই—bet/layout.tsx মিনিমাল টপ-বার দিয়ে দিয়েছে */}
 
-      {/* Balances (হেডারের নিচে সেফ স্পেস) */}
-      <div className="max-w-6xl mx-auto px-4 mt-16 md:mt-20 py-6 flex items-center justify-between">
+      {/* Balances bar (হেডারের নিচে) */}
+      <div className="max-w-6xl mx-auto px-4 pt-4 md:pt-6 pb-6 flex items-center justify-between">
         <Button variant="secondary" className="rounded-xl" onClick={()=>window.history.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" /> Back
         </Button>
@@ -244,7 +211,7 @@ export default function BetPage() {
       </div>
 
       {/* MAIN CONTENT */}
-      <div className="max-w-6xl mx-auto px-4 pb-16 grid lg:grid-cols-3 gap-8 pt-2">
+      <div className="max-w-6xl mx-auto px-4 pb-16 grid lg:grid-cols-3 gap-8">
         {/* Left: Deposit + Trending */}
         <div className="lg:col-span-1 space-y-6">
           <Card className={panel}>
@@ -523,7 +490,7 @@ function GoogleLogo() {
       <path fill="#EA4335" d="M533.5 278.4c0-18.6-1.5-37.2-4.7-55.3H272v104.9h146.9c-6.3 34-26.3 62.8-56 82.1v68h90.3c52.8-48.6 80.3-120.4 80.3-199.7z"/>
       <path fill="#34A853" d="M272 544.3c72.9 0 134.2-24.1 178.9-65.1l-90.3-68c-25.1 16.8-57.3 26.6-88.6 26.6-68 0-125.7-45.9-146.4-107.3H32.5v67.7C77.9 489.1 169.3 544.3 272 544.3z"/>
       <path fill="#4A90E2" d="M125.6 330.5c-10.2-30.4-10.2-63.2 0-93.6v-67.7H32.5c-42.5 84.9-42.5 144.2 0 229.1l93.1-67.8z"/>
-      <path fill="#FBBC05" d="M272 106.1c37.6-.6 74 13.7 101.7 39.8l76.1-76.1C401.8 16.7 338.8-1 272 0 169.3 0 77.9 55.2 32.5 145.2l93.1 67.7C146.3 152 204 106.1 272 106.1z"/>
+      <path fill="#FBBC05" d="M272 106.1c37.6-.6 74 13.7 101.7 39.8ল76.1-76.1C401.8 16.7 338.8-1 272 0 169.3 0 77.9 55.2 32.5 145.2l93.1 67.7C146.3 152 204 106.1 272 106.1z"/>
     </svg>
   );
 }
@@ -593,7 +560,6 @@ function SignupForm({
         </div>
       </div>
 
-      {/* Social row like your screenshot (demo) */}
       <SocialRow onGoogle={onGoogle} />
 
       <div className="pt-3 text-center text-sm text-slate-300">
