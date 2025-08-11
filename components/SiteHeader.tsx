@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
@@ -9,6 +10,9 @@ import { Menu, X } from 'lucide-react';
 
 export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isLanding = pathname === '/';           // landing page
+  const showConnect = !isLanding;               // hide connect on landing only
 
   const navLinks = [
     { href: '/#tokenomics', label: 'Tokenomics' },
@@ -53,7 +57,9 @@ export default function SiteHeader() {
           <Button asChild size="sm" variant="default">
             <Link href="/whitepaper">Read Whitepaper</Link>
           </Button>
-          <ConnectButton chainStatus="icon" showBalance={false} accountStatus="address" />
+          {showConnect && (
+            <ConnectButton chainStatus="icon" showBalance={false} accountStatus="address" />
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -89,9 +95,12 @@ export default function SiteHeader() {
               <Link href="/whitepaper" onClick={() => setMenuOpen(false)}>Read Whitepaper</Link>
             </Button>
 
-            <div className="w-full">
-              <ConnectButton chainStatus="icon" showBalance={false} accountStatus="address" />
-            </div>
+            {/* Hide connect on landing only */}
+            {showConnect && (
+              <div className="w-full">
+                <ConnectButton chainStatus="icon" showBalance={false} accountStatus="address" />
+              </div>
+            )}
           </nav>
         </div>
       )}
