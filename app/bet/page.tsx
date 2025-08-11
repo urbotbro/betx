@@ -384,7 +384,7 @@ export default function BetPage() {
         </div>
       </header>
 
-      {/* Balances — ইনলাইন চিপস */}
+      {/* Balances — inline chips */}
       <div className="max-w-6xl mx-auto px-4 mt-6 md:mt-8 py-2">
         <div className="flex items-center gap-2 text-xs overflow-x-auto no-scrollbar">
           <span className="text-slate-300 mr-1 shrink-0">Balances:</span>
@@ -478,7 +478,7 @@ export default function BetPage() {
                 className={`${panel} transition-all ${
                   highlightId === m.id ? 'ring-2 ring-sky-500' : ''
                 }`}
-                ref={(el) => (cardRefs.current[m.id] = el)}
+                ref={(el) => { cardRefs.current[m.id] = el; }}
               >
                 <CardHeader>
                   <CardTitle className="text-base flex items-center justify-between text-slate-100">
