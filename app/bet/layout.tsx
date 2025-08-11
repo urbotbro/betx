@@ -8,8 +8,7 @@ export const metadata: Metadata = {
 
 /**
  * Bet section layout: keep it bare.
- * We don't render global site header/footer here.
- * The page (/app/bet/page.tsx) already draws its own minimal top bar.
+ * No global header/footer.
  */
 export default function BetLayout({
   children,
