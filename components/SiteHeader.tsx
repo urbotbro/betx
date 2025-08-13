@@ -13,7 +13,7 @@ export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  // Hide the Connect button on these routes (keep or edit as you like)
+  // Hide the Connect button on these routes
   const HIDE_CONNECT_ON = ['/', '/tips', '/tipster'];
   const showConnect = !HIDE_CONNECT_ON.includes(pathname);
 
@@ -30,19 +30,18 @@ export default function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 safe-pt w-full backdrop-blur supports-[backdrop-filter]:bg-slate-900/70 bg-slate-900/60 border-b border-slate-800">
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-        {/* Brand */}
+        {/* Brand (logo only, bigger) */}
         <Link href="/" aria-label="BetX home" className="flex items-center gap-2">
-          {/* Logo image */}
           <Image
-            src="/download/betx.png"  // change to "/betx.png" if you put it directly under /public
+            src="/download/betx.png" // change to "/betx.png" if you moved it
             alt="BetX logo"
-            width={32}
-            height={32}
-            className="h-8 w-8 rounded-xl object-contain"
+            width={48}
+            height={48}
             priority
+            className="h-10 w-10 md:h-12 md:w-12 rounded-xl object-contain"
           />
-          <span className="font-bold tracking-tight text-slate-100">BetX</span>
-          <Badge variant="secondary" className="ml-2">SOL</Badge>
+          {/* Removed the text label "BetX" */}
+          <Badge variant="secondary" className="ml-1">SOL</Badge>
         </Link>
 
         {/* Desktop Nav */}
@@ -115,4 +114,3 @@ export default function SiteHeader() {
     </header>
   );
 }
-
