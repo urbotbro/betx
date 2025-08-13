@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
@@ -12,7 +13,7 @@ export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  // Hide the Connect button on these routes
+  // Hide the Connect button on these routes (keep or edit as you like)
   const HIDE_CONNECT_ON = ['/', '/tips', '/tipster'];
   const showConnect = !HIDE_CONNECT_ON.includes(pathname);
 
@@ -31,9 +32,15 @@ export default function SiteHeader() {
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
         {/* Brand */}
         <Link href="/" aria-label="BetX home" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-emerald-500 grid place-items-center text-white">
-            🔥
-          </div>
+          {/* Logo image */}
+          <Image
+            src="/download/betx.png"  // change to "/betx.png" if you put it directly under /public
+            alt="BetX logo"
+            width={32}
+            height={32}
+            className="h-8 w-8 rounded-xl object-contain"
+            priority
+          />
           <span className="font-bold tracking-tight text-slate-100">BetX</span>
           <Badge variant="secondary" className="ml-2">SOL</Badge>
         </Link>
@@ -97,7 +104,6 @@ export default function SiteHeader() {
               <Link href="/whitepaper" onClick={() => setMenuOpen(false)}>Read Whitepaper</Link>
             </Button>
 
-            {/* Hide connect on selected routes */}
             {showConnect && (
               <div className="w-full">
                 <ConnectButton chainStatus="icon" showBalance={false} accountStatus="address" />
@@ -109,3 +115,4 @@ export default function SiteHeader() {
     </header>
   );
 }
+
