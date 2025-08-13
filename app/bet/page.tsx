@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image'; // ⟵ নতুন: লোগোর জন্য
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -398,12 +399,18 @@ export default function BetPage() {
       {/* TOP BAR — brand + auth only */}
       <header className="sticky top-0 z-50 w-full backdrop-blur supports-[backdrop-filter]:bg-slate-900/70 bg-slate-900/60 border-b border-slate-800">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2" aria-label="BetX home">
-            <div className="h-8 w-8 rounded-xl bg-gradient-to-tr from-cyan-400 to-blue-500 grid place-items-center text-white">
-              🔥
-            </div>
-            <span className="font-bold tracking-tight text-slate-100">BetX</span>
-            <Badge variant="secondary" className="ml-2">
+          <Link href="/" className="flex items-center gap-2 overflow-visible" aria-label="BetX home">
+            {/* 🔁 এখানে আগের ইমোজি + টেক্সট বাদ দিয়ে সাইটহেডারের মত বড় লোগো ব্যবহার করা হলো */}
+            <Image
+              src="/download/betx.png"   // ফাইলটা /public/download/betx.png এ থাকলে ঠিক আছে
+              alt="BetX logo"
+              width={144}
+              height={144}
+              priority
+              className="h-10 w-10 md:h-12 md:w-12 rounded-2xl object-contain scale-[1.75] md:scale-[2.0] origin-left -my-2 mr-6 md:mr-10"
+            />
+            {/* টেক্সট 'BetX' সরানো হয়েছে */}
+            <Badge variant="secondary" className="ml-1">
               SOL
             </Badge>
           </Link>
