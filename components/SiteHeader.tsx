@@ -13,9 +13,20 @@ export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  // Hide the Connect button on these routes
-  const HIDE_CONNECT_ON = ['/', '/tips', '/tipster'];
-  const showConnect = !HIDE_CONNECT_ON.includes(pathname);
+  // যে রুটগুলোতে Connect লুকোনো থাকবে
+  const HIDE_CONNECT_ON = [
+    '/',                 // landing
+    '/tips',             // tips
+    '/tipster',          // tipster root + subroutes
+    '/apply',            // /apply
+    '/apply-tipster',    // /apply-tipster (যদি থাকে)
+    '/tipster/apply',    // /tipster/apply
+    '/tipster/apply-as-tipster', // অন্য নাম থাকলে কভার
+  ];
+  const hideOnThisPage = HIDE_CONNECT_ON.some(
+    (p) => pathname === p || pathname.startsWith(p + '/')
+  );
+  const showConnect = !hideOnThisPage;
 
   const navLinks = [
     { href: '/#tokenomics', label: 'Tokenomics' },
@@ -33,16 +44,13 @@ export default function SiteHeader() {
         {/* Brand (logo only) */}
         <Link href="/" aria-label="BetX home" className="flex items-center overflow-visible">
           <Image
-            src="/download/betx.png" // change to "/betx.png" if you moved it
+            src="/download/betx.png" // /public/download/betx.png
             alt="BetX logo"
             width={144}
             height={144}
             priority
-            // keep the small layout height so header height doesn't grow;
-            // visually enlarge with scale; add right margin to create space for SOL badge
             className="h-10 w-10 md:h-12 md:w-12 rounded-2xl object-contain scale-[1.75] md:scale-[2.0] origin-left -my-2 mr-6 md:mr-10"
           />
-          {/* push the badge further to the right */}
           <Badge variant="secondary" className="ml-1 md:ml-2">SOL</Badge>
         </Link>
 
