@@ -12,7 +12,6 @@ import {
 
 type Datum = { name: string; value: number };
 
-/** Tooltip props (ভার্সন ডিফারেন্স হ্যান্ডেল করতে লাইটওয়েট টাইপ) */
 type TooltipPayloadItem = {
   name?: string;
   value?: number | string;
@@ -54,12 +53,30 @@ export default function TokenomicsChart({
     [data, total]
   );
 
-  // হোভার স্টেট
+  /** container width -> dynamic aspect & radii */
+  const wrapRef = React.useRef<HTMLDivElement | null>(null);
+  const [wrapW, setWrapW] = React.useState(800);
+  React.useEffect(() => {
+    const read = () => {
+      if (wrapRef.current) setWrapW(wrapRef.current.clientWidth);
+    };
+    read();
+    window.addEventListener('resize', read);
+    return () => window.removeEventListener('resize', read);
+  }, []);
+
+  // ছোট স্ক্রিনে বেশি লম্বা, বড় স্ক্রিনে চওড়া—এমন aspect
+  const aspect = wrapW < 480 ? 1.15 : 1.9;
+
+  // donut radius স্ক্রিন অনুযায়ী অটো
+  const outerR = Math.max(80, Math.min(120, Math.round(wrapW * 0.22)));
+  const innerR = Math.max(48, outerR - 34);
+
+  // hover state
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
   const onEnter = (_: unknown, idx: number) => setActiveIndex(idx);
   const onLeave = () => setActiveIndex(null);
 
-  /** Active slice renderer (স্লাইস সামান্য বড় + subtle glow) */
   const renderActiveShape = (props: any) => {
     const {
       cx,
@@ -76,7 +93,6 @@ export default function TokenomicsChart({
 
     return (
       <g>
-        {/* glow ring */}
         <Sector
           cx={cx}
           cy={cy}
@@ -87,7 +103,6 @@ export default function TokenomicsChart({
           fill={fill}
           opacity={0.18}
         />
-        {/* main sector */}
         <Sector
           cx={cx}
           cy={cy}
@@ -97,7 +112,6 @@ export default function TokenomicsChart({
           endAngle={endAngle}
           fill={fill}
         />
-        {/* inline percent label */}
         <text
           x={cx}
           y={cy}
@@ -106,29 +120,17 @@ export default function TokenomicsChart({
           fill="#e5e7eb"
           fontSize={12}
           fontWeight={800}
-          style={{
-            paintOrder: 'stroke',
-            stroke: 'rgba(2,6,23,0.85)',
-            strokeWidth: 3,
-          }}
+          style={{ paintOrder: 'stroke', stroke: 'rgba(2,6,23,0.85)', strokeWidth: 3 }}
         >
           {`${(percent * 100).toFixed(0)}%`}
         </text>
-        <text
-          x={cx}
-          y={cy}
-          dy={12}
-          textAnchor="middle"
-          fill="#cbd5e1"
-          fontSize={11}
-        >
+        <text x={cx} y={cy} dy={12} textAnchor="middle" fill="#cbd5e1" fontSize={11}>
           {payload?.name ?? ''} • {value}
         </text>
       </g>
     );
   };
 
-  /** ডিফল্ট (active না থাকলে) label — পারসেন্টেজ শুধু দেখাই */
   const renderLabel = ({
     cx = 0,
     cy = 0,
@@ -141,7 +143,6 @@ export default function TokenomicsChart({
     const r = innerRadius + (outerRadius - innerRadius) * 0.55;
     const x = cx + r * Math.cos(-midAngle * RAD);
     const y = cy + r * Math.sin(-midAngle * RAD);
-
     return (
       <text
         x={x}
@@ -151,28 +152,20 @@ export default function TokenomicsChart({
         dominantBaseline="central"
         fontSize={11}
         fontWeight={700}
-        style={{
-          paintOrder: 'stroke',
-          stroke: 'rgba(2,6,23,0.8)',
-          strokeWidth: 3,
-        }}
+        style={{ paintOrder: 'stroke', stroke: 'rgba(2,6,23,0.8)', strokeWidth: 3 }}
       >
         {(percent * 100).toFixed(0)}%
       </text>
     );
   };
 
-  /** কাস্টম টুলটিপ */
   const CustomTooltip: React.FC<TooltipPropsLite> = ({ active, payload }) => {
     if (!active || !payload || payload.length === 0) return null;
     const p = payload[0];
     const name = p.name ?? p.payload?.name ?? '';
     const valueNum =
-      typeof p.value === 'number'
-        ? p.value
-        : Number(p.value ?? p.payload?.value ?? 0);
+      typeof p.value === 'number' ? p.value : Number(p.value ?? p.payload?.value ?? 0);
     const pct = total > 0 ? ((valueNum / total) * 100).toFixed(2) : '0.00';
-
     return (
       <div
         style={{
@@ -192,17 +185,27 @@ export default function TokenomicsChart({
     );
   };
 
-  /** কাস্টম লেজেন্ড (বার + পারসেন্টেজ) */
+  /** লেজেন্ড: ছোট স্ক্রিনে ১ কলাম, ≥768px এ ২ কলাম */
+  const [twoCol, setTwoCol] = React.useState(false);
+  React.useEffect(() => {
+    const check = () => setTwoCol(window.innerWidth >= 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   const CustomLegend: React.FC = () => {
     return (
       <ul
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+          gridTemplateColumns: twoCol ? 'repeat(2, minmax(0, 1fr))' : '1fr',
           gap: 12,
           marginTop: 14,
           listStyle: 'none',
           padding: 0,
+          width: '100%',
+          boxSizing: 'border-box',
         }}
       >
         {withPct.map((d, i) => {
@@ -269,11 +272,18 @@ export default function TokenomicsChart({
   };
 
   return (
-    <div style={{ width: '100%', height: 340 }}>
-      <ResponsiveContainer>
+    <div
+      ref={wrapRef}
+      style={{
+        width: '100%',
+        // fixed height বাদ; aspect দিয়ে Responsive রাখা হলো
+        // নিচের overflow চার্ট/লেবেল/লেজেন্ড যেন কার্ডের বাইরে না যায় সেটা নিশ্চিত করবে
+        overflow: 'hidden',
+      }}
+    >
+      <ResponsiveContainer width="100%" aspect={aspect}>
         <PieChart>
           <defs>
-            {/* subtle inner shadow for the donut hole */}
             <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
               <feOffset dx="0" dy="0" />
               <feGaussianBlur stdDeviation="3" result="offset-blur" />
@@ -290,8 +300,8 @@ export default function TokenomicsChart({
             nameKey="name"
             cx="50%"
             cy="50%"
-            innerRadius={68}
-            outerRadius={104}
+            innerRadius={innerR}
+            outerRadius={outerR}
             startAngle={90}
             endAngle={-270}
             minAngle={6}
@@ -311,7 +321,7 @@ export default function TokenomicsChart({
             ))}
           </Pie>
 
-          {/* Center total */}
+          {/* center text */}
           <text
             x="50%"
             y="50%"
@@ -333,11 +343,7 @@ export default function TokenomicsChart({
             fontSize={24}
             fontWeight={900}
             fill="#f1f5f9"
-            style={{
-              paintOrder: 'stroke',
-              stroke: 'rgba(2,6,23,0.85)',
-              strokeWidth: 4,
-            }}
+            style={{ paintOrder: 'stroke', stroke: 'rgba(2,6,23,0.85)', strokeWidth: 4 }}
           >
             {total}
           </text>
@@ -346,8 +352,10 @@ export default function TokenomicsChart({
         </PieChart>
       </ResponsiveContainer>
 
-      {/* কাস্টম লেজেন্ড */}
-      <CustomLegend />
+      {/* Legend সবসময় চার্টের নিচে, কার্ডের ভেতরেই থাকবে */}
+      <div style={{ padding: '0 2px 8px' }}>
+        <CustomLegend />
+      </div>
     </div>
   );
 }
