@@ -31,14 +31,14 @@ export default function SiteHeader() {
     <header className="sticky top-0 z-50 safe-pt w-full backdrop-blur supports-[backdrop-filter]:bg-slate-900/70 bg-slate-900/60 border-b border-slate-800">
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
         {/* Brand (logo only, bigger) */}
-        <Link href="/" aria-label="BetX home" className="flex items-center gap-2">
+        <Link href="/" aria-label="BetX home" className="flex items-center gap-2 overflow-visible">
           <Image
             src="/download/betx.png" // change to "/betx.png" if you moved it
             alt="BetX logo"
             width={144}
             height={144}
             priority
-            className="h-28 w-28 md:h-32 md:w-32 rounded-xl object-contain"
+            className="h-10 w-10 md:h-12 md:w-12 rounded-2xl object-contain scale-[1.75] md:scale-[2.0] origin-left -my-2"
           />
           {/* Removed the text label "BetX" */}
           <Badge variant="secondary" className="ml-1">SOL</Badge>
