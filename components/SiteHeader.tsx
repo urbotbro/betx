@@ -35,10 +35,10 @@ export default function SiteHeader() {
           <Image
             src="/download/betx.png" // change to "/betx.png" if you moved it
             alt="BetX logo"
-            width={80}
-            height={80}
+            width={144}
+            height={144}
             priority
-            className="h-16 w-16 md:h-20 md:w-20 rounded-xl object-contain"
+            className="h-28 w-28 md:h-32 md:w-32 rounded-xl object-contain"
           />
           {/* Removed the text label "BetX" */}
           <Badge variant="secondary" className="ml-1">SOL</Badge>
