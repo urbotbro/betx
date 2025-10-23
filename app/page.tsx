@@ -16,7 +16,6 @@ import {
   ExternalLink,
   Twitter,
   MessageCircle,
-  Flame,
   BarChart3,
   Layers3,
 } from "lucide-react";
@@ -93,9 +92,6 @@ export default function LandingPage() {
               <a href="#" target="_blank"><MessageCircle className="h-4 w-4 mr-2" />Join Telegram</a>
             </Button>
           </div>
-
-        </div>
-      </section>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Button size="lg" className="rounded-2xl px-6" asChild>
