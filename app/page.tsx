@@ -51,6 +51,52 @@ export default function LandingPage() {
             Start with Tips & Tipsters and a curated set of matches. Expand to full markets as we progress.
           </p>
 
+          {/* ✅ Seed Sale Timer Section */}
+          <div className="mt-10 bg-slate-900/70 border border-slate-800 rounded-2xl p-6 max-w-md mx-auto">
+            <h3 className="text-lg font-semibold text-emerald-400 mb-3">Seed Sale is Live</h3>
+
+            <div className="text-2xl font-bold tracking-wide">
+              {timeLeft.days}d : {timeLeft.hours}h : {timeLeft.minutes}m : {timeLeft.seconds}s
+            </div>
+
+            <p className="mt-3 text-sm text-slate-300">
+              Raise Target: <span className="text-slate-100 font-semibold">$10,000</span>
+            </p>
+            <p className="text-sm text-slate-300">
+              Already Raised: <span className="text-emerald-400 font-semibold">${alreadyRaised}</span>
+            </p>
+
+            <div className="w-full bg-slate-800 rounded-full h-2 mt-3">
+              <div className="bg-emerald-400 h-2 rounded-full" style={{ width: `${progressPercent}%` }} />
+            </div>
+
+            <p className="text-sm mt-3 text-slate-400">
+              Price: 1 BETX = $0.01
+            </p>
+
+            <p className="mt-3 text-xs text-slate-300">
+              Min Buy: $100 • Max Buy: $1000
+            </p>
+
+            <p className="mt-3 text-sm text-slate-200 font-medium break-all">
+              ✅ Send SOL/USDC to:  
+              <span className="text-emerald-400 inline-block mt-1">
+                95bViZMUW8c9iyt9N2vEE92Jq4JMQSVQFeNQXiGkEX38
+              </span>
+            </p>
+
+            <p className="mt-2 text-xs text-slate-300">
+              তারপর Telegram-এ Username এবং Transaction Hash পাঠাতে হবে।
+            </p>
+
+            <Button className="mt-4 w-full rounded-2xl" asChild>
+              <a href="#" target="_blank"><MessageCircle className="h-4 w-4 mr-2" />Join Telegram</a>
+            </Button>
+          </div>
+
+        </div>
+      </section>
+
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Button size="lg" className="rounded-2xl px-6" asChild>
               <a href="#sale"><Rocket className="mr-2 h-5 w-5" />Get in on the Sale</a>
