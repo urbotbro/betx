@@ -39,10 +39,12 @@ export default function LandingPage() {
     seconds: 0,
   });
 
-  const [alreadyRaised, setAlreadyRaised] = useState(0);
-  const [progressPercent, setProgressPercent] = useState(0);
+  // ✅ Set initial raised amount here
+  const RAISE_TARGET = 10000;
+  const [alreadyRaised, setAlreadyRaised] = useState(600); // Change this number as needed
+  const [progressPercent, setProgressPercent] = useState((600 / RAISE_TARGET) * 100);
 
-  // ✅ Updated countdown to 29 October 2025 23:59:59 Dhaka (17:59:59 UTC)
+  // ✅ Countdown timer
   useEffect(() => {
     const targetDate = new Date("2025-10-29T17:59:59Z").getTime();
 
@@ -66,6 +68,11 @@ export default function LandingPage() {
 
     return () => clearInterval(timer);
   }, []);
+
+  // ✅ Whenever alreadyRaised changes, update the progress
+  useEffect(() => {
+    setProgressPercent((alreadyRaised / RAISE_TARGET) * 100);
+  }, [alreadyRaised]);
 
   return (
     <div className="min-h-screen pb-safe bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
