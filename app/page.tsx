@@ -34,27 +34,33 @@ const COLORS = ["#60a5fa", "#34d399", "#fbbf24", "#f472b6", "#f87171", "#a78bfa"
 export default function LandingPage() {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
-    hours: 0
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
   });
 
   const [alreadyRaised, setAlreadyRaised] = useState(0);
   const [progressPercent, setProgressPercent] = useState(0);
 
+  // ✅ Updated countdown to 29 October 2025 23:59:59 Dhaka (17:59:59 UTC)
   useEffect(() => {
-    const targetDate = new Date("2025-12-31T00:00:00Z").getTime();
+    const targetDate = new Date("2025-10-29T17:59:59Z").getTime();
 
     const timer = setInterval(() => {
       const now = Date.now();
       const diff = targetDate - now;
 
       if (diff <= 0) {
-        setTimeLeft({ days: 0, hours: 0 });
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        clearInterval(timer);
         return;
       }
 
       setTimeLeft({
         days: Math.floor(diff / (1000 * 60 * 60 * 24)),
         hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / (1000 * 60)) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
       });
     }, 1000);
 
@@ -64,31 +70,34 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen pb-safe bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
 
+      {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10 pointer-events-none opacity-30 bg-[radial-gradient(45rem_35rem_at_50%_0%,#2563eb_10%,transparent_60%)]" />
         <div className="max-w-6xl mx-auto px-4 pt-20 pb-24 text-center">
           <Badge variant="outline" className="mb-4 border-emerald-400/40 text-emerald-300">
             Solana-powered tipster & betting hub
           </Badge>
+
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight text-slate-100">
             Bet smarter. <span className="text-emerald-400">Earn together.</span>
           </h1>
+
           <p className="mt-4 text-slate-300 max-w-2xl mx-auto">
-            BetX brings verified tipsters, tokenized rewards, and a phased betting rollout on Solana.
-            Start with Tips & Tipsters and a curated set of matches. Expand to full markets as we progress.
+            BetX brings verified tipsters, tokenized rewards, and gradual expansion of betting markets.
           </p>
 
-          {/* ✅ Updated Countdown Display */}
+          {/* Countdown */}
           <div className="mt-10 bg-slate-900/70 border border-slate-800 rounded-2xl p-6 max-w-md mx-auto">
             <h3 className="text-lg font-semibold text-emerald-400 mb-3">Seed Sale is Live</h3>
 
             <div className="text-2xl font-bold tracking-wide">
-              {timeLeft.days}d : {timeLeft.hours}h
+              {timeLeft.days}d : {timeLeft.hours}h : {timeLeft.minutes}m : {timeLeft.seconds}s
             </div>
 
             <p className="mt-3 text-sm text-slate-300">
               Raise Target: <span className="text-slate-100 font-semibold">$10,000</span>
             </p>
+
             <p className="text-sm text-slate-300">
               Already Raised: <span className="text-emerald-400 font-semibold">${alreadyRaised}</span>
             </p>
@@ -112,15 +121,13 @@ export default function LandingPage() {
               </span>
             </p>
 
-            {/* ✅ Updated English Text */}
             <p className="mt-2 text-xs text-slate-300">
               After payment, send your Telegram username and transaction hash.
             </p>
 
-            {/* ✅ Updated Telegram Redirect Link */}
             <Button className="mt-4 w-full rounded-2xl" asChild>
               <a href="https://t.me/+UGERmOgABWAwNGU1" target="_blank">
-                <MessageCircle className="h-4 w-4 mr-2" />Join Telegram
+                <MessageCircle className="h-4 w-4 mr-2" /> Join Telegram
               </a>
             </Button>
           </div>
