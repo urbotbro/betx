@@ -50,6 +50,19 @@ export default function LandingPage() {
             BetX brings verified tipsters, tokenized rewards, and a phased betting rollout on Solana.
             Start with Tips & Tipsters and a curated set of matches. Expand to full markets as we progress.
           </p>
+          {/* Seed Sale Countdown */}
+<div className="mt-10 flex flex-col items-center">
+  <div className="text-lg font-semibold text-emerald-400 mb-1">
+    Seed Sale Starts In
+  </div>
+
+  <CountdownTimer targetDate={new Date(Date.now() + 5*24*60*60*1000 + 23*60*60*1000)} />
+
+  <div className="mt-3 text-sm text-slate-300 flex flex-col gap-1">
+    <span>Price: <strong className="text-slate-100">0.04 USDC / BETX</strong></span>
+    <span>Total Sale: <strong className="text-slate-100">250,000 BETX</strong></span>
+  </div>
+</div>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Button size="lg" className="rounded-2xl px-6" asChild>
