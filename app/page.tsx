@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from "react"; // ✅ added useState + useEffect
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import TokenomicsChart from "@/components/TokenomicsChart";
 import { Button } from "@/components/ui/button";
@@ -32,18 +32,14 @@ const TOKENOMICS = [
 const COLORS = ["#60a5fa", "#34d399", "#fbbf24", "#f472b6", "#f87171", "#a78bfa"];
 
 export default function LandingPage() {
-  // ✅ Added minimal states to avoid undefined errors
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0
+    hours: 0
   });
 
   const [alreadyRaised, setAlreadyRaised] = useState(0);
   const [progressPercent, setProgressPercent] = useState(0);
 
-  // ✅ Simple countdown logic update every second
   useEffect(() => {
     const targetDate = new Date("2025-12-31T00:00:00Z").getTime();
 
@@ -52,15 +48,13 @@ export default function LandingPage() {
       const diff = targetDate - now;
 
       if (diff <= 0) {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        setTimeLeft({ days: 0, hours: 0 });
         return;
       }
 
       setTimeLeft({
         days: Math.floor(diff / (1000 * 60 * 60 * 24)),
         hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((diff / (1000 * 60)) % 60),
-        seconds: Math.floor((diff / 1000) % 60),
       });
     }, 1000);
 
@@ -70,7 +64,6 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen pb-safe bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
 
-      {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10 pointer-events-none opacity-30 bg-[radial-gradient(45rem_35rem_at_50%_0%,#2563eb_10%,transparent_60%)]" />
         <div className="max-w-6xl mx-auto px-4 pt-20 pb-24 text-center">
@@ -85,12 +78,12 @@ export default function LandingPage() {
             Start with Tips & Tipsters and a curated set of matches. Expand to full markets as we progress.
           </p>
 
-          {/* ✅ Seed Sale Timer Section */}
+          {/* ✅ Updated Countdown Display */}
           <div className="mt-10 bg-slate-900/70 border border-slate-800 rounded-2xl p-6 max-w-md mx-auto">
             <h3 className="text-lg font-semibold text-emerald-400 mb-3">Seed Sale is Live</h3>
 
             <div className="text-2xl font-bold tracking-wide">
-              {timeLeft.days}d : {timeLeft.hours}h : {timeLeft.minutes}m : {timeLeft.seconds}s
+              {timeLeft.days}d : {timeLeft.hours}h
             </div>
 
             <p className="mt-3 text-sm text-slate-300">
@@ -113,18 +106,22 @@ export default function LandingPage() {
             </p>
 
             <p className="mt-3 text-sm text-slate-200 font-medium break-all">
-              ✅ Send SOL/USDC to:  
+              ✅ Send SOL/USDC to:
               <span className="text-emerald-400 inline-block mt-1">
                 95bViZMUW8c9iyt9N2vEE92Jq4JMQSVQFeNQXiGkEX38
               </span>
             </p>
 
+            {/* ✅ Updated English Text */}
             <p className="mt-2 text-xs text-slate-300">
-              তারপর Telegram-এ Username এবং Transaction Hash পাঠাতে হবে।
+              After payment, send your Telegram username and transaction hash.
             </p>
 
+            {/* ✅ Updated Telegram Redirect Link */}
             <Button className="mt-4 w-full rounded-2xl" asChild>
-              <a href="#" target="_blank"><MessageCircle className="h-4 w-4 mr-2" />Join Telegram</a>
+              <a href="https://t.me/+UGERmOgABWAwNGU1" target="_blank">
+                <MessageCircle className="h-4 w-4 mr-2" />Join Telegram
+              </a>
             </Button>
           </div>
 
