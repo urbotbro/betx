@@ -1,6 +1,6 @@
 'use client';
 
-import React from "react";
+import React, { useState, useEffect } from "react"; // ✅ added useState + useEffect
 import Link from "next/link";
 import TokenomicsChart from "@/components/TokenomicsChart";
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,41 @@ const TOKENOMICS = [
 const COLORS = ["#60a5fa", "#34d399", "#fbbf24", "#f472b6", "#f87171", "#a78bfa"];
 
 export default function LandingPage() {
+  // ✅ Added minimal states to avoid undefined errors
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  });
+
+  const [alreadyRaised, setAlreadyRaised] = useState(0);
+  const [progressPercent, setProgressPercent] = useState(0);
+
+  // ✅ Simple countdown logic update every second
+  useEffect(() => {
+    const targetDate = new Date("2025-12-31T00:00:00Z").getTime();
+
+    const timer = setInterval(() => {
+      const now = Date.now();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
+      setTimeLeft({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / (1000 * 60)) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="min-h-screen pb-safe bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
 
@@ -187,7 +222,7 @@ export default function LandingPage() {
           </Card>
 
           <Card className="bg-slate-900/60 border-slate-800">
-            <CardHeader><CardTitle className="text-slate-100">Key Parameters</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-slate-100">Key Parameters</CardHeader></CardHeader>
             <CardContent className="text-sm text-slate-300 space-y-3">
               <div className="flex items-start gap-2"><Check className="h-4 w-4 text-emerald-400 mt-1" /><div><span className="font-semibold text-slate-100">Chain:</span> Solana</div></div>
               <div className="flex items-start gap-2"><Check className="h-4 w-4 text-emerald-400 mt-1" /><div><span className="font-semibold text-slate-100">Ticker:</span> BETX</div></div>
