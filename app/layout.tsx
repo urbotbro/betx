@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NovaBet Protocol",
+  title: "BETX",
   description: "Crypto-powered tips & betting hub",
 };
 
