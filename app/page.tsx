@@ -46,7 +46,7 @@ export default function LandingPage() {
 
   // ✅ Countdown timer
   useEffect(() => {
-    const targetDate = new Date("2025-10-29T17:59:59Z").getTime();
+    const targetDate = new Date("2025-11-29T17:29:59Z").getTime();
 
     const timer = setInterval(() => {
       const now = Date.now();
