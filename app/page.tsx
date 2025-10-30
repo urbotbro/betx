@@ -46,7 +46,7 @@ export default function LandingPage() {
 
   // ✅ Countdown timer
   useEffect(() => {
-    const targetDate = new Date("2025-11-06T17:29:59Z").getTime();
+    const targetDate = new Date("2025-10-30T17:29:59Z").getTime();
 
     const timer = setInterval(() => {
       const now = Date.now();
@@ -95,7 +95,7 @@ export default function LandingPage() {
 
           {/* Countdown */}
           <div className="mt-10 bg-slate-900/70 border border-slate-800 rounded-2xl p-6 max-w-md mx-auto">
-            <h3 className="text-lg font-semibold text-emerald-400 mb-3">Seed Sale is Live</h3>
+            <h3 className="text-lg font-semibold text-emerald-400 mb-3">Seed Sale is cancelled</h3>
 
             <div className="text-2xl font-bold tracking-wide">
               {timeLeft.days}d : {timeLeft.hours}h : {timeLeft.minutes}m : {timeLeft.seconds}s
@@ -141,7 +141,7 @@ export default function LandingPage() {
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Button size="lg" className="rounded-2xl px-6" asChild>
-              <a href="#sale"><Rocket className="mr-2 h-5 w-5" />Get in on the Sale</a>
+              <a href="#sale"><Rocket className="mr-2 can/>Get in on the Sale</a>
             </Button>
             <Button size="lg" variant="secondary" className="rounded-2xl px-6" asChild>
               <Link href="/whitepaper">
