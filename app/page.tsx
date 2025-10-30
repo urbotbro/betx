@@ -141,7 +141,7 @@ export default function LandingPage() {
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Button size="lg" className="rounded-2xl px-6" asChild>
-              <a href="#sale"><Rocket className="mr-2 can/>Get in on the Sale</a>
+              <a href="#sale"><Rocket className="mr-2 />Get in on the Sale</a>
             </Button>
             <Button size="lg" variant="secondary" className="rounded-2xl px-6" asChild>
               <Link href="/whitepaper">
