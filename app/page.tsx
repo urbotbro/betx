@@ -40,7 +40,7 @@ export default function LandingPage() {
   });
 
   // ✅ Set initial raised amount here
-  const RAISE_TARGET = 20,000;
+  const RAISE_TARGET = 20000;
   const [alreadyRaised, setAlreadyRaised] = useState(2860.06); // Change this number as needed
   const [progressPercent, setProgressPercent] = useState((2860.06 / RAISE_TARGET) * 100);
 
