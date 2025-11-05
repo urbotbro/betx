@@ -102,7 +102,7 @@ export default function LandingPage() {
             </div>
 
             <p className="mt-3 text-sm text-slate-300">
-              Raise Target: <span className="text-slate-100 font-semibold">$10,000</span>
+              Raise Target: <span className="text-slate-100 font-semibold">$20,000</span>
             </p>
 
             <p className="text-sm text-slate-300">
