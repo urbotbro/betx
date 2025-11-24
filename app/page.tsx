@@ -41,8 +41,8 @@ export default function LandingPage() {
 
   // ✅ Set initial raised amount here
   const RAISE_TARGET = 20000;
-  const [alreadyRaised, setAlreadyRaised] = useState(6560.90); // Change this number as needed
-  const [progressPercent, setProgressPercent] = useState((6560.90 / RAISE_TARGET) * 100);
+  const [alreadyRaised, setAlreadyRaised] = useState(7560.60); // Change this number as needed
+  const [progressPercent, setProgressPercent] = useState((7560.60 / RAISE_TARGET) * 100);
 
   // ✅ Countdown timer
   useEffect(() => {
