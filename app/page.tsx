@@ -41,8 +41,8 @@ export default function LandingPage() {
 
   // ✅ Set initial raised amount here
   const RAISE_TARGET = 20000;
-  const [alreadyRaised, setAlreadyRaised] = useState(12706.86); // Change this number as needed
-  const [progressPercent, setProgressPercent] = useState((12706.86 / RAISE_TARGET) * 100);
+  const [alreadyRaised, setAlreadyRaised] = useState(10206.86) ; // Change this number as needed
+  const [progressPercent, setProgressPercent] = useState((10206.86 / RAISE_TARGET) * 100);
 
   // ✅ Countdown timer
   useEffect(() => {
@@ -95,7 +95,7 @@ export default function LandingPage() {
 
           {/* Countdown */}
           <div className="mt-10 bg-slate-900/70 border border-slate-800 rounded-2xl p-6 max-w-md mx-auto">
-            <h3 className="text-lg font-semibold text-emerald-400 mb-3">Seed Sale is Live (second round) </h3>
+            <h3 className="text-lg font-semibold text-emerald-400 mb-3">Seed Sale is Finished (withdraw pending -2500$) </h3>
 
             <div className="text-2xl font-bold tracking-wide">
               {timeLeft.days}d : {timeLeft.hours}h : {timeLeft.minutes}m : {timeLeft.seconds}s
