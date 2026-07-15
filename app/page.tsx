@@ -90,7 +90,7 @@ export default function LandingPage() {
           </h1>
 
           <p className="mt-4 text-slate-300 max-w-2xl mx-auto">
-            BetX brings verified tipsters, tokenized rewards, and gradual expansion of betting markets.
+            OddFi brings verified tipsters, tokenized rewards, and gradual expansion of betting markets.
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
@@ -139,7 +139,7 @@ export default function LandingPage() {
               <CardTitle className="flex items-center gap-2 text-slate-100"><BarChart3 className="h-5 w-5" /> Verified Tips Access</CardTitle>
             </CardHeader>
             <CardContent className="text-slate-300 text-sm leading-relaxed">
-              Stake or hold BETX to unlock curated, data-backed tips. See each tipster’s win-rate, ROI, and streak before you follow.
+              Stake or hold OddFi to unlock curated, data-backed tips. See each tipster’s win-rate, ROI, and streak before you follow.
             </CardContent>
           </Card>
 
@@ -154,10 +154,10 @@ export default function LandingPage() {
 
           <Card className="bg-slate-900/60 border-slate-800">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-slate-100"><Layers3 className="h-5 w-5" /> Utility: BETX Token</CardTitle>
+              <CardTitle className="flex items-center gap-2 text-slate-100"><Layers3 className="h-5 w-5" /> Utility: OddFi Token</CardTitle>
             </CardHeader>
             <CardContent className="text-slate-300 text-sm leading-relaxed">
-              Use BETX for tip unlocks, fee discounts, staking rewards, and governance. More utilities unlock as phases roll out.
+              Use OddFi for tip unlocks, fee discounts, staking rewards, and governance. More utilities unlock as phases roll out.
             </CardContent>
           </Card>
 
@@ -176,7 +176,7 @@ export default function LandingPage() {
       <section id="tokenomics" className="scroll-mt-24 md:scroll-mt-28 max-w-6xl mx-auto px-4 pb-4">
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-100">Tokenomics</h2>
         <p className="mt-2 text-slate-300 text-sm max-w-3xl">
-          Supply: <span className="font-semibold text-slate-100">100,000,000 BETX</span> (fixed). Taxes: 0% on buys/sells (subject to governance).
+          Supply: <span className="font-semibold text-slate-100">100,000,000 OddFi</span> (fixed). Taxes: 0% on buys/sells (subject to governance).
           Team tokens locked 6 months, then linear unlock 12 months. Liquidity locked for 12 months at launch.
         </p>
 
@@ -190,7 +190,7 @@ export default function LandingPage() {
             <CardHeader><CardTitle className="text-slate-100">Key Parameters</CardHeader></CardHeader>
             <CardContent className="text-sm text-slate-300 space-y-3">
               <div className="flex items-start gap-2"><Check className="h-4 w-4 text-emerald-400 mt-1" /><div><span className="font-semibold text-slate-100">Chain:</span> Solana</div></div>
-              <div className="flex items-start gap-2"><Check className="h-4 w-4 text-emerald-400 mt-1" /><div><span className="font-semibold text-slate-100">Ticker:</span> BETX</div></div>
+              <div className="flex items-start gap-2"><Check className="h-4 w-4 text-emerald-400 mt-1" /><div><span className="font-semibold text-slate-100">Ticker:</span> OddFi</div></div>
               <div className="flex items-start gap-2"><Check className="h-4 w-4 text-emerald-400 mt-1" /><div><span className="font-semibold text-slate-100">Sale:</span> Public/Community Round (TBA)</div></div>
               <div className="flex items-start gap-2"><Check className="h-4 w-4 text-emerald-400 mt-1" /><div><span className="font-semibold text-slate-100">Initial Liquidity:</span> 60–70% of raise, locked</div></div>
               <div className="flex items-start gap-2"><Check className="h-4 w-4 text-emerald-400 mt-1" /><div><span className="font-semibold text-slate-100">Utilities at launch:</span> Tips access, tipster payouts, early fee discounts</div></div>
@@ -243,7 +243,7 @@ export default function LandingPage() {
           <Card className="bg-slate-900/60 border-slate-800">
             <CardHeader><CardTitle className="text-slate-100">Phase 3 • Utilities</CardTitle></CardHeader>
             <CardContent className="text-sm text-slate-300 space-y-2">
-              <p>BETX staking, fee discounts, governance voting.</p>
+              <p>OddFi staking, fee discounts, governance voting.</p>
               <p>Treasury dashboard & rewards automation.</p>
             </CardContent>
           </Card>
