@@ -7,7 +7,7 @@ export default function SiteFooter() {
         
         {/* Left side */}
         <p className="text-center md:text-left">
-          © {new Date().getFullYear()} BetX Protocol. All rights reserved.
+          © {new Date().getFullYear()} OddFi Protocol. All rights reserved.
         </p>
 
         {/* Right side */}
